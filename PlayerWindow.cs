@@ -16,6 +16,7 @@ namespace gokart_vanal
 {
     public partial class PlayerWindow : Form
     {
+        private BindingSource markerBindingSource = new BindingSource(new List<Marker>(), "");
         private VideoCapture videoCaptureA;
         private VideoCapture videoCaptureB;
         private Mat matA = new Mat();
@@ -24,6 +25,10 @@ namespace gokart_vanal
         public PlayerWindow()
         {
             InitializeComponent();
+            // markers.ComboBox.BindingContext = this.BindingContext;
+            markers.ComboBox.DataSource = markerBindingSource;
+            markers.ComboBox.DisplayMember = "Display";
+            markers.ComboBox.ValueMember = "Display";
             intervalFramesToExport.SelectedIndex = 0;
             numberOfImagesToExport.SelectedIndex = 0;
             LoadVideos();
@@ -200,6 +205,46 @@ namespace gokart_vanal
                     return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void createMarker_Click(object sender, EventArgs e)
+        {
+            var m = new MarkerNameModal();
+            var dr = m.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                markerBindingSource.Add(new Marker(m.value, Int32.Parse(frameA.Text), Int32.Parse(frameB.Text)));
+                markerBindingSource.ResetBindings(false);
+                markers.SelectedIndex = markers.Items.Count - 1;
+                markers.Enabled = true;
+                deleteMarker.Enabled = true;
+            }
+        }
+
+        private void markers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var i = markers.SelectedIndex;
+            if (i == -1)
+            {
+                return;
+            }
+            var m = (Marker)markerBindingSource[i];
+            hScrollBarA.Value = m.frameA;
+            hScrollBarB.Value = m.frameB;
+            frameA.Text = "" + m.frameA;
+            frameB.Text = "" + m.frameB;
+            pictureBoxVideo.Invalidate();
+        }
+
+        private void deleteMarker_Click(object sender, EventArgs e)
+        {
+            var i = markers.SelectedIndex;
+            markerBindingSource.RemoveAt(i);
+            if (markerBindingSource.Count == 0)
+            {
+                markers.Enabled = false;
+                deleteMarker.Enabled = false;
+            }
         }
     }
 }

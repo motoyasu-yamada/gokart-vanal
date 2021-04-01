@@ -38,7 +38,7 @@ namespace gokart_vanal
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.frameB = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.newMarker = new System.Windows.Forms.ToolStripButton();
+            this.createMarker = new System.Windows.Forms.ToolStripButton();
             this.deleteMarker = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.prev6frames = new System.Windows.Forms.ToolStripButton();
@@ -99,7 +99,7 @@ namespace gokart_vanal
             this.frameB,
             this.toolStripSeparator1,
             this.markers,
-            this.newMarker,
+            this.createMarker,
             this.deleteMarker,
             this.toolStripSeparator2,
             this.prev6frames,
@@ -123,6 +123,9 @@ namespace gokart_vanal
             this.frameA.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             this.frameA.Name = "frameA";
             this.frameA.Size = new System.Drawing.Size(100, 25);
+            this.frameA.Text = "0";
+            this.frameA.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.frameA.ToolTipText = "上画面のフレーム位置";
             // 
             // toolStripLabel1
             // 
@@ -135,29 +138,36 @@ namespace gokart_vanal
             this.frameB.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             this.frameB.Name = "frameB";
             this.frameB.Size = new System.Drawing.Size(100, 25);
+            this.frameB.Text = "0";
+            this.frameB.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // newMarker
+            // createMarker
             // 
-            this.newMarker.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.newMarker.Image = ((System.Drawing.Image)(resources.GetObject("newMarker.Image")));
-            this.newMarker.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.newMarker.Name = "newMarker";
-            this.newMarker.Size = new System.Drawing.Size(35, 22);
-            this.newMarker.Text = "保存";
+            this.createMarker.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.createMarker.Image = ((System.Drawing.Image)(resources.GetObject("createMarker.Image")));
+            this.createMarker.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.createMarker.Name = "createMarker";
+            this.createMarker.Size = new System.Drawing.Size(35, 22);
+            this.createMarker.Text = "保存";
+            this.createMarker.ToolTipText = "現在の上画面と下画面のフレーム位置をマーカーとして保存します。";
+            this.createMarker.Click += new System.EventHandler(this.createMarker_Click);
             // 
             // deleteMarker
             // 
             this.deleteMarker.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.deleteMarker.Enabled = false;
             this.deleteMarker.Image = ((System.Drawing.Image)(resources.GetObject("deleteMarker.Image")));
             this.deleteMarker.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.deleteMarker.Name = "deleteMarker";
             this.deleteMarker.Size = new System.Drawing.Size(35, 22);
             this.deleteMarker.Text = "削除";
+            this.deleteMarker.ToolTipText = "現在選択しているマーカーを削除します。";
+            this.deleteMarker.Click += new System.EventHandler(this.deleteMarker_Click);
             // 
             // toolStripSeparator2
             // 
@@ -261,8 +271,12 @@ namespace gokart_vanal
             // 
             // markers
             // 
+            this.markers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.markers.Enabled = false;
             this.markers.Name = "markers";
             this.markers.Size = new System.Drawing.Size(121, 25);
+            this.markers.ToolTipText = "マーカー一覧";
+            this.markers.SelectedIndexChanged += new System.EventHandler(this.markers_SelectedIndexChanged);
             // 
             // PlayerWindow
             // 
@@ -296,7 +310,7 @@ namespace gokart_vanal
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripTextBox frameB;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton newMarker;
+        private System.Windows.Forms.ToolStripButton createMarker;
         private System.Windows.Forms.ToolStripButton deleteMarker;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton prev6frames;
