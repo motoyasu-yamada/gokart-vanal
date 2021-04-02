@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace gokart_vanal
 {
-    static class Program
+  static class Program
+  {
+    public static UserSettings userSettings = new UserSettings();
+
+    /// <summary>
+    /// アプリケーションのメイン エントリ ポイントです。
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-        /// <summary>
-        /// アプリケーションのメイン エントリ ポイントです。
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PlayerWindow());
-        }
+      Application.EnableVisualStyles();
+      Application.SetCompatibleTextRenderingDefault(false);
+      Application.Run(new PlayerWindow());
     }
+  }
 }
