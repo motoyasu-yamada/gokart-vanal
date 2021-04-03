@@ -5,7 +5,7 @@ namespace gokart_vanal
 {
   static class Program
   {
-    public static UserSettings userSettings = new UserSettings();
+    public static UserSettings UserSettings { get; } = new UserSettings();
 
     /// <summary>
     /// アプリケーションのメイン エントリ ポイントです。

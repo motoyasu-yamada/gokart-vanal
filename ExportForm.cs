@@ -24,12 +24,11 @@ namespace gokart_vanal
 
       InitializeComponent();
 
-      var s = Program.userSettings;
-      Select(intervalOfImages, s.ExportIntervalOfImages);
-      Select(numberOfImages, s.ExportNumberOfImages);
-      folder.Text = s.ExportFolder;
-      filename.Text = s.ExportFileName;
-      lengthOfVideo.SelectedIndex = 0;
+      var s = Program.UserSettings;
+      Select(imageDecompositionIntervalMillis, s.Export.ImageDecompositionIntervalMillis);
+      Select(lengthMillis, s.Export.LengthMillis);
+      folder.Text = s.Export.Folder;
+      fileNameTemplate.Text = s.Export.FileNameTemplate;
     }
 
     private void Select(ComboBox comboBox, int value)
@@ -49,11 +48,11 @@ namespace gokart_vanal
 
     private void Save()
     {
-      var s = Program.userSettings;
-      s.ExportIntervalOfImages = int.Parse((string)intervalOfImages.SelectedItem);
-      s.ExportNumberOfImages = int.Parse((string)numberOfImages.SelectedItem);
-      s.ExportFolder = folder.Text;
-      s.ExportFileName = filename.Text;
+      var s = Program.UserSettings;
+      s.Export.ImageDecompositionIntervalMillis = int.Parse((string)imageDecompositionIntervalMillis.SelectedItem);
+      s.Export.LengthMillis = int.Parse((string)lengthMillis.SelectedItem);
+      s.Export.Folder = folder.Text;
+      s.Export.FileNameTemplate = fileNameTemplate.Text;
       s.Save();
     }
 
@@ -72,15 +71,15 @@ namespace gokart_vanal
     private void exportImages_Click(object sender, EventArgs e)
     {
       Save();
-      var fileName = filename.Text;
+      var fileName = fileNameTemplate.Text;
       fileName = fileName.Replace("{videoa_name}", "videoa");
       fileName = fileName.Replace("{videob_name}", "videob");
       fileName = fileName.Replace("{marker_name}", "marker");
 
       workerToExportImages.RunWorkerAsync(new ExportImageSettings
       {
-        IntervalOfImages = Int32.Parse(intervalOfImages.Text),
-        NumberOfImages = Int32.Parse(numberOfImages.Text),
+        ImageDecompositionIntervalMillis = Int32.Parse(imageDecompositionIntervalMillis.Text),
+        LengthMillis = Int32.Parse(lengthMillis.Text),
         Folder = folder.Text,
         FileName = fileName
       });
@@ -89,9 +88,9 @@ namespace gokart_vanal
     private void workerToExportImages_DoWork(object sender, DoWorkEventArgs e)
     {
       var a = (ExportImageSettings)e.Argument;
-      var framesOfInterval = a.IntervalOfImages / 100 * 6;
-      var frameA = playData.CurrentFramePosA;
-      var frameB = playData.CurrentFramePosB;
+      var framesOfInterval = a.ImageDecompositionIntervalMillis / 100 * 6;
+      var startFrameA = playData.CurrentFramePosA;
+      var startFrameB = playData.CurrentFramePosB;
       var matA = new Mat();
       var matB = new Mat();
 
@@ -100,37 +99,40 @@ namespace gokart_vanal
 
       using (Graphics gr = Graphics.FromImage(bmp))
       {
-        Enumerable.Range(1, a.NumberOfImages).ToList().ForEach(i =>
-        {
-          workerToExportImages.ReportProgress(100 * (i - 1) / a.NumberOfImages);
+        var millisPerFrameA = 1000 / videoCaptureA.Fps;
+        var millisPerFrameB = 1000 / videoCaptureB.Fps;
 
+        var i = 0;
+        while (i <= a.LengthMillis)
+        {
+          workerToExportImages.ReportProgress(100 * i / a.LengthMillis);
+          var frameA = startFrameA + (int)(i * videoCaptureA.Fps / 1000);
           videoCaptureA.PosFrames = frameA;
           videoCaptureA.Read(matA);
           Image imageA = BitmapConverter.ToBitmap(matA);
+          gr.DrawImage(imageA,
+          new RectangleF(0, 0, bmp.Width, bmp.Height / 2),
+          new RectangleF(0, imageA.Height * 2 / 5, imageA.Width, imageA.Height / 2),
+          GraphicsUnit.Pixel);
 
+          var frameB = startFrameB + (int)(i * videoCaptureA.Fps / 1000);
           videoCaptureB.PosFrames = frameB;
           videoCaptureB.Read(matB);
           Image imageB = BitmapConverter.ToBitmap(matB);
-
-          gr.DrawImage(imageA,
-                  new RectangleF(0, 0, bmp.Width, bmp.Height / 2),
-                  new RectangleF(0, imageA.Height * 2 / 5, imageA.Width, imageA.Height / 2),
-                  GraphicsUnit.Pixel);
           gr.DrawImage(imageB,
-                      new RectangleF(0, bmp.Height / 2, bmp.Width, bmp.Height / 2),
-                      new RectangleF(0, imageB.Height * 2 / 5, imageB.Width, imageB.Height / 2),
-                      GraphicsUnit.Pixel);
+          new RectangleF(0, bmp.Height / 2, bmp.Width, bmp.Height / 2),
+          new RectangleF(0, imageB.Height * 2 / 5, imageB.Width, imageB.Height / 2),
+          GraphicsUnit.Pixel);
 
           var outName = $"{a.FileName}_{i:D6}.jpeg";
           var outPath = Path.Combine(a.Folder, outName);
+          using (var dst = BitmapConverter.ToMat(bmp))
+          {
+            Cv2.ImWrite(outPath, dst);
+          }
 
-          var dst = BitmapConverter.ToMat(bmp);
-          Cv2.ImWrite(outPath, dst);
-          dst.Dispose();
-
-          frameA += framesOfInterval;
-          frameB += framesOfInterval;
-        });
+          i += a.ImageDecompositionIntervalMillis;
+        }
         workerToExportImages.ReportProgress(100);
       }
 
@@ -149,8 +151,8 @@ namespace gokart_vanal
 
   class ExportImageSettings
   {
-    public int NumberOfImages { get; set; }
-    public int IntervalOfImages { get; set; }
+    public int LengthMillis { get; set; }
+    public int ImageDecompositionIntervalMillis { get; set; }
     public string Folder { get; set; }
     public string FileName { get; set; }
   }

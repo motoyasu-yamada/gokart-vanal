@@ -1,7 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,7 +8,7 @@ namespace gokart_vanal
 {
   public partial class PlayerWindow : Form
   {
-    private BindingSource markerBindingSource = new BindingSource(new List<Marker>(), "");
+    private BindingSource markerBindingSource;
     private PlayData playData { get; } = new PlayData();
     private VideoCapture videoCaptureA;
     private VideoCapture videoCaptureB;
@@ -19,9 +18,10 @@ namespace gokart_vanal
       InitializeComponent();
       pictureBoxVideo.AllowDrop = true;
 
+      markerBindingSource = new BindingSource(Program.UserSettings.Deck.Markers, "");
       markers.ComboBox.DataSource = markerBindingSource;
-      markers.ComboBox.DisplayMember = "Display";
-      markers.ComboBox.ValueMember = "Display";
+      markers.ComboBox.DisplayMember = nameof(Marker.Display);
+      markers.ComboBox.ValueMember = nameof(Marker.Display);
 
       currentFramePosA.TextBox.DataBindings.Add(nameof(currentFramePosA.TextBox.Text), playData, nameof(playData.CurrentFramePosA), true, DataSourceUpdateMode.OnPropertyChanged);
       hScrollBarA.DataBindings.Add(nameof(hScrollBarA.Value), playData, nameof(playData.CurrentFramePosA), true, DataSourceUpdateMode.OnPropertyChanged);
@@ -31,27 +31,76 @@ namespace gokart_vanal
       LoadVideos();
     }
 
+    private void SetVideoA(string videoPathA)
+    {
+      if (this.videoCaptureA != null)
+      {
+        this.videoCaptureA.Dispose();
+        this.videoCaptureA = null;
+      }
+
+      if (videoPathA != null)
+      {
+        this.videoCaptureA = new VideoCapture(videoPathA);
+        this.hScrollBarA.Maximum = this.videoCaptureA.FrameCount;
+        this.hScrollBarA.Enabled = true;
+        this.currentFramePosA.Enabled = true;
+      }
+      else
+      {
+        this.hScrollBarA.Maximum = 0;
+        this.hScrollBarA.Enabled = false;
+        this.currentFramePosA.Enabled = false;
+      }
+      Program.UserSettings.Deck.A.VideoPath = videoPathA;
+    }
+
+    private void SetVideoB(string videoPathB)
+    {
+      if (this.videoCaptureB != null)
+      {
+        this.videoCaptureB.Dispose();
+        this.videoCaptureB = null;
+      }
+      if (videoPathB != null)
+      {
+        this.videoCaptureB = new VideoCapture(videoPathB);
+        this.hScrollBarB.Maximum = this.videoCaptureB.FrameCount;
+        this.currentFramePosB.Enabled = true;
+        this.hScrollBarB.Enabled = true;
+      }
+      else
+      {
+        this.hScrollBarB.Maximum = 0;
+        this.hScrollBarB.Enabled = false;
+        this.currentFramePosB.Enabled = false;
+      }
+      Program.UserSettings.Deck.B.VideoPath = videoPathB;
+    }
 
     private void LoadVideos()
     {
-      this.videoCaptureA = new VideoCapture(Program.userSettings.VideoAPath);
-      this.videoCaptureB = new VideoCapture(Program.userSettings.VideoBPath);
+      SetVideoA(Program.UserSettings.Deck.A.VideoPath);
+      SetVideoB(Program.UserSettings.Deck.B.VideoPath);
+      markerBindingSource.ResetBindings(false);
+      markers.Enabled = markerBindingSource.Count > 0;
 
-      this.hScrollBarA.Maximum = this.videoCaptureA.FrameCount;
-      this.hScrollBarB.Maximum = this.videoCaptureB.FrameCount;
+      pictureBoxVideo.Invalidate();
+    }
+
+    void RefreshVideo()
+    {
       pictureBoxVideo.Invalidate();
     }
 
     private void hScrollBarA_ValueChanged(object sender, EventArgs e)
     {
       pictureBoxVideo.Invalidate();
-      // currentFramePosA.Text = "" + hScrollBarA.Value;
     }
 
     private void hScrollBarB_ValueChanged(object sender, EventArgs e)
     {
       pictureBoxVideo.Invalidate();
-      // currentFramePosB.Text = "" + hScrollBarB.Value;
     }
 
     private void PlayerWindow_Activated(object sender, EventArgs e)
@@ -200,7 +249,7 @@ namespace gokart_vanal
       if (dr == DialogResult.OK)
       {
         markerBindingSource.Add(new Marker(m.value, Int32.Parse(currentFramePosA.Text), Int32.Parse(currentFramePosB.Text)));
-        markerBindingSource.ResetBindings(false);
+        Program.UserSettings.Save();
         markers.SelectedIndex = markers.Items.Count - 1;
         markers.Enabled = true;
         deleteMarker.Enabled = true;
@@ -224,6 +273,8 @@ namespace gokart_vanal
     {
       var i = markers.SelectedIndex;
       markerBindingSource.RemoveAt(i);
+      Program.UserSettings.Save();
+
       if (markerBindingSource.Count == 0)
       {
         markers.Enabled = false;
@@ -241,30 +292,17 @@ namespace gokart_vanal
       switch (OnAOrB(e))
       {
         case Drag.OnA:
-          if (this.videoCaptureA != null)
-          {
-            this.videoCaptureA.Dispose();
-          }
-          this.videoCaptureA = new VideoCapture(filePath);
+          SetVideoA(filePath);
           this.playData.CurrentFramePosA = 0;
-          this.hScrollBarA.Maximum = this.videoCaptureA.FrameCount;
-          this.markerBindingSource.Clear();
-          Program.userSettings.VideoAPath = filePath;
-          Program.userSettings.Save();
           break;
         case Drag.OnB:
-          if (this.videoCaptureB != null)
-          {
-            this.videoCaptureB.Dispose();
-          }
-          this.videoCaptureB = new VideoCapture(filePath);
+          SetVideoB(filePath);
           this.playData.CurrentFramePosB = 0;
-          this.hScrollBarB.Maximum = this.videoCaptureB.FrameCount;
-          this.markerBindingSource.Clear();
-          Program.userSettings.VideoBPath = filePath;
-          Program.userSettings.Save();
           break;
       }
+      this.markerBindingSource.Clear();
+      Program.UserSettings.Save();
+
       drag = Drag.None;
       Console.WriteLine($"DragDrop {drag} -> {filePath}");
       pictureBoxVideo.Invalidate();

@@ -1,10 +1,18 @@
-﻿namespace gokart_vanal
+﻿using System;
+
+namespace gokart_vanal
 {
-  class Marker
+  [Serializable()]
+  public class Marker
   {
-    string name;
-    public int frameA { get; private set; }
-    public int frameB { get; private set; }
+    public string name { get; set; }
+    public int frameA { get; set; }
+    public int frameB { get; set; }
+
+    public Marker()
+    {
+      this.name = "";
+    }
 
     public Marker(string name, int frameA, int frameB)
     {

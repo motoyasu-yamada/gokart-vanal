@@ -61,9 +61,9 @@ namespace gokart_vanal
       this.pictureBoxVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.pictureBoxVideo.Location = new System.Drawing.Point(1, 60);
+      this.pictureBoxVideo.Location = new System.Drawing.Point(1, 49);
       this.pictureBoxVideo.Name = "pictureBoxVideo";
-      this.pictureBoxVideo.Size = new System.Drawing.Size(1433, 550);
+      this.pictureBoxVideo.Size = new System.Drawing.Size(1433, 561);
       this.pictureBoxVideo.TabIndex = 0;
       this.pictureBoxVideo.TabStop = false;
       this.pictureBoxVideo.DragDrop += new System.Windows.Forms.DragEventHandler(this.pictureBoxVideo_DragDrop);
@@ -77,7 +77,7 @@ namespace gokart_vanal
       // 
       this.hScrollBarA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.hScrollBarA.Location = new System.Drawing.Point(1, 40);
+      this.hScrollBarA.Location = new System.Drawing.Point(1, 29);
       this.hScrollBarA.Maximum = 59411;
       this.hScrollBarA.Name = "hScrollBarA";
       this.hScrollBarA.Size = new System.Drawing.Size(1433, 17);
@@ -250,25 +250,25 @@ namespace gokart_vanal
       // 書き出すToolStripMenuItem
       // 
       this.書き出すToolStripMenuItem.Name = "書き出すToolStripMenuItem";
-      this.書き出すToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.書き出すToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
       this.書き出すToolStripMenuItem.Text = "書き出す(&E) ...";
       this.書き出すToolStripMenuItem.Click += new System.EventHandler(this.export_Click);
       // 
       // toolStripMenuItem1
       // 
       this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-      this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+      this.toolStripMenuItem1.Size = new System.Drawing.Size(169, 6);
       // 
       // 動画Aを読み込むToolStripMenuItem
       // 
       this.動画Aを読み込むToolStripMenuItem.Name = "動画Aを読み込むToolStripMenuItem";
-      this.動画Aを読み込むToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.動画Aを読み込むToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
       this.動画Aを読み込むToolStripMenuItem.Text = "動画Aを読み込む ...";
       // 
       // 動画Bを読み込むToolStripMenuItem
       // 
       this.動画Bを読み込むToolStripMenuItem.Name = "動画Bを読み込むToolStripMenuItem";
-      this.動画Bを読み込むToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+      this.動画Bを読み込むToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
       this.動画Bを読み込むToolStripMenuItem.Text = "動画Bを読み込む ...";
       // 
       // PlayerWindow

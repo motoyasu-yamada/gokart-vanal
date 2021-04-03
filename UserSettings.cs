@@ -1,65 +1,99 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Xml.Serialization;
+using static gokart_vanal.PlayData;
 
 namespace gokart_vanal
 {
   class UserSettings : ApplicationSettingsBase
   {
-    [UserScopedSetting()]
-    public string ExportFolder
+    [UserScopedSetting]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+    public ExportSettings Export
     {
-      get { return (string)this["ExportFolder"]; }
-      set { this["ExportFolder"] = value; }
+      get { return (ExportSettings)this[nameof(UserSettings.Export)] ?? (Export = new ExportSettings()); }
+      set { this[nameof(UserSettings.Export)] = value; }
     }
 
-    [UserScopedSetting()]
-    [DefaultSettingValue("diff_{videoa_name}_{videob_name}_{marker_name}")]
-    public string ExportFileName
+    [UserScopedSetting]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+    public DeckSettings Deck
     {
-      get { return (string)this["ExportFileName"]; }
-      set { this["ExportFileName"] = value; }
+      get { return (DeckSettings)this[nameof(UserSettings.Deck)] ?? (Deck = new DeckSettings()); }
+      set { this[nameof(UserSettings.Deck)] = value; }
     }
 
-    [UserScopedSetting()]
-    [DefaultSettingValue("10")]
-    public int ExportNumberOfImages
+    [UserScopedSetting]
+    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
+    public HistorySettings History
     {
-      get { return (int)this["ExportNumberOfImages"]; }
-      set { this["ExportNumberOfImages"] = value; }
-    }
-
-    [UserScopedSetting()]
-    [DefaultSettingValue("200")]
-    public int ExportIntervalOfImages
-    {
-      get { return (int)this["ExportIntervalOfImages"]; }
-      set { this["ExportIntervalOfImages"] = value; }
-    }
-
-    [UserScopedSetting()]
-    [DefaultSettingValue("C:\\Users\\dell\\iCloudDrive\\KART\\MOTEGI-BEST\\KGO-20210328-SS-TT-BEST-GH015958.mp4")]
-    public string VideoAPath
-    {
-      get
-      {
-        return ((string)this["VideoAPath"]);
-      }
-      set
-      {
-        this["VideoAPath"] = (string)value;
-      }
-    }
-    [UserScopedSetting()]
-    [DefaultSettingValue("M:\\DCIM\\100GOPRO\\GH010104.MP4")]
-    public string VideoBPath
-    {
-      get
-      {
-        return ((string)this["VideoBPath"]);
-      }
-      set
-      {
-        this["VideoBPath"] = (string)value;
-      }
+      get { return (HistorySettings)this[nameof(UserSettings.History)] ?? (History = new HistorySettings()); }
+      set { this[nameof(UserSettings.History)] = value; }
     }
   }
+
+  [Serializable()]
+  public class ExportSettings
+  {
+    [SettingsSerializeAs(SettingsSerializeAs.String)]
+    public string Folder { get; set; }
+    [SettingsSerializeAs(SettingsSerializeAs.String)]
+    public string FileNameTemplate { get; set; }
+    [SettingsSerializeAs(SettingsSerializeAs.String)]
+    public int LengthMillis { get; set; } = 3000;
+    [SettingsSerializeAs(SettingsSerializeAs.String)]
+    public int ImageDecompositionIntervalMillis { get; set; } = 200;
+  }
+
+  [Serializable()]
+  public class DeckItem
+  {
+    public string VideoPath { get; set; }
+    public int VerticalOffset { get; set; } = 0;
+    public int HorizontalOffset { get; set; } = 0;
+  }
+
+
+  [Serializable]
+  public class DeckSettings
+  {
+    public ArrangeModes ArrangeMode { get; set; } = ArrangeModes.Vertical;
+
+    public DeckItem A { get; set; } = new DeckItem();
+
+    public DeckItem B { get; set; } = new DeckItem();
+
+    public List<Marker> Markers { get; set; } = new List<Marker>();
+  }
+
+  [Serializable()]
+  public class HistorySettings
+  {
+    public ArrangeModes ArrangeMode { get; set; } = ArrangeModes.Vertical;
+    public List<VideoHistoryItem> VideoHistory { get; set; } = new List<VideoHistoryItem>();
+    public List<MakerHistoryItem> MakerHistoryItem { get; set; } = new List<MakerHistoryItem>();
+  }
+
+  [Serializable()]
+  public class MakerHistoryItem
+  {
+    public string GetKey()
+    {
+      return VideoPathA + "___" + VideoPathB;
+
+    }
+    public string VideoPathA { get; set; }
+    public string VideoPathB { get; set; }
+    public List<Marker> Markers { get; set; } = new List<Marker>();
+  }
+
+  [Serializable()]
+  public class VideoHistoryItem
+  {
+    public string VideoPath { get; set; }
+    public int VerticalOffset { get; set; }
+    public int HorizontalOffset { get; set; }
+  }
+
 }
