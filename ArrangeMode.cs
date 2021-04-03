@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace gokart_vanal
 {
   [Serializable()]
-  public enum ArrangeModes { Vertical, Horizontal }
+  public enum ArrangeMode { Vertical, Horizontal }
 }

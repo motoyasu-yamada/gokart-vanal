@@ -49,12 +49,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrangeModes.cs" />
+    <Compile Include="ArrangeMode.cs" />
     <Compile Include="ExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExportForm.Designer.cs">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeckEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DeckEditForm.Designer.cs">
+      <DependentUpon>DeckEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Marker.cs" />
     <Compile Include="MarkerNameModal.cs">
@@ -75,6 +81,9 @@
     <Compile Include="UserSettings.cs" />
     <EmbeddedResource Include="ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DeckEditForm.resx">
+      <DependentUpon>DeckEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MarkerNameModal.resx">
       <DependentUpon>MarkerNameModal.cs</DependentUpon>

@@ -88,7 +88,7 @@ namespace gokart_vanal
       pictureBoxVideo.Invalidate();
     }
 
-    void RefreshVideo()
+    public void RefreshVideo()
     {
       pictureBoxVideo.Invalidate();
     }
@@ -154,18 +154,38 @@ namespace gokart_vanal
 
     }
 
+    private SolidBrush dragBrush = new SolidBrush(Color.Red);
+    private SolidBrush noneBrush = new SolidBrush(Color.DarkGray);
+    private SolidBrush nullBrash = new SolidBrush(Color.Black);
+
+    private RectangleF NewSrcRect(Bitmap bitmap, DeckItem deckItem, RectangleF dst)
+    {
+      var height = bitmap.Height * deckItem.ScalePercent / 100;
+      var top = (bitmap.Height - height)/ 2 + bitmap.Height * deckItem.OffsetPercent / 100;
+
+      if (deckItem.VideoScalingMethod == VideoScalingMethod.FitToScreen)
+      {
+        return new RectangleF(0, top, bitmap.Width, height);
+      }
+
+      var width = height * dst.Width / dst.Height;
+      var left = (bitmap.Width - width) / 2;
+      return new RectangleF(left, top, width, height);
+    }
+
     private void pictureBoxVideo_Paint(object sender, PaintEventArgs e)
     {
-      var dragBrush = new SolidBrush(System.Drawing.Color.Red);
-      var noneBrush = new SolidBrush(Color.DarkGray);
+      
       var rectA = new RectangleF(0, 0, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
       var rectB = new RectangleF(0, pictureBoxVideo.Height / 2, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
+      
       if (drag == Drag.OnA)
       {
         e.Graphics.FillRectangle(dragBrush, rectA);
       }
       else
       {
+        e.Graphics.FillRectangle(nullBrash, rectA);
         using (var matA = new Mat())
         {
           if (videoCaptureA != null)
@@ -184,7 +204,7 @@ namespace gokart_vanal
             {
               e.Graphics.DrawImage(imageA,
               rectA,
-              new RectangleF(0, imageA.Height * 2 / 5, imageA.Width, imageA.Height / 2),
+              NewSrcRect(imageA, Program.UserSettings.Deck.A, rectA),
               GraphicsUnit.Pixel);
             }
           }
@@ -196,6 +216,7 @@ namespace gokart_vanal
       }
       else
       {
+        e.Graphics.FillRectangle(nullBrash, rectB);
         using (var matB = new Mat())
         {
           if (videoCaptureB != null)
@@ -214,7 +235,7 @@ namespace gokart_vanal
             {
               e.Graphics.DrawImage(imageB,
                   rectB,
-                  new RectangleF(0, imageB.Height * 2 / 5, imageB.Width, imageB.Height / 2),
+                  NewSrcRect(imageB, Program.UserSettings.Deck.B, rectB),
                   GraphicsUnit.Pixel);
             }
           }
@@ -349,6 +370,18 @@ namespace gokart_vanal
       {
         return Drag.OnA;
       }
+    }
+
+    private void deckA_Click(object sender, EventArgs e)
+    {
+      var f = new DeckEditForm(this, Program.UserSettings.Deck.A, videoCaptureA);
+      f.ShowDialog();
+    }
+
+    private void deckB_Click(object sender, EventArgs e)
+    {
+      var f = new DeckEditForm(this, Program.UserSettings.Deck.B, videoCaptureB);
+      f.ShowDialog();
     }
   }
 }

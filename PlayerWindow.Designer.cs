@@ -47,11 +47,10 @@ namespace gokart_vanal
       this.next6frames = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
       this.toolStripDefault = new System.Windows.Forms.ToolStrip();
-      this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-      this.書き出すToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-      this.動画Aを読み込むToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.動画Bを読み込むToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.deckB = new System.Windows.Forms.ToolStripButton();
+      this.deckA = new System.Windows.Forms.ToolStripButton();
+      this.export = new System.Windows.Forms.ToolStripButton();
+      this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
       this.toolStripDefault.SuspendLayout();
       this.SuspendLayout();
@@ -96,12 +95,13 @@ namespace gokart_vanal
       // 
       // currentFramePosA
       // 
+      this.currentFramePosA.AutoSize = false;
       this.currentFramePosA.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
       this.currentFramePosA.Name = "currentFramePosA";
-      this.currentFramePosA.Size = new System.Drawing.Size(100, 25);
+      this.currentFramePosA.Size = new System.Drawing.Size(75, 25);
       this.currentFramePosA.Text = "0";
       this.currentFramePosA.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-      this.currentFramePosA.ToolTipText = "上画面のフレーム位置";
+      this.currentFramePosA.ToolTipText = "A画面(上または左)のフレーム位置";
       // 
       // toolStripLabel1
       // 
@@ -111,11 +111,13 @@ namespace gokart_vanal
       // 
       // currentFramePosB
       // 
+      this.currentFramePosB.AutoSize = false;
       this.currentFramePosB.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
       this.currentFramePosB.Name = "currentFramePosB";
-      this.currentFramePosB.Size = new System.Drawing.Size(100, 25);
+      this.currentFramePosB.Size = new System.Drawing.Size(75, 25);
       this.currentFramePosB.Text = "0";
       this.currentFramePosB.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      this.currentFramePosB.ToolTipText = "B画面(下または右)のフレーム位置";
       // 
       // toolStripSeparator1
       // 
@@ -212,6 +214,7 @@ namespace gokart_vanal
       // toolStripDefault
       // 
       this.toolStripDefault.GripMargin = new System.Windows.Forms.Padding(6);
+      this.toolStripDefault.ImeMode = System.Windows.Forms.ImeMode.Off;
       this.toolStripDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.currentFramePosA,
             this.toolStripLabel1,
@@ -226,50 +229,48 @@ namespace gokart_vanal
             this.next1frame,
             this.next6frames,
             this.toolStripSeparator3,
-            this.toolStripDropDownButton1});
+            this.deckA,
+            this.deckB,
+            this.toolStripSeparator4,
+            this.export});
       this.toolStripDefault.Location = new System.Drawing.Point(0, 0);
       this.toolStripDefault.Name = "toolStripDefault";
       this.toolStripDefault.Size = new System.Drawing.Size(1437, 25);
-      this.toolStripDefault.TabIndex = 21;
-      this.toolStripDefault.Text = "toolStrip1";
+      this.toolStripDefault.TabIndex = 1;
+      this.toolStripDefault.Text = "デフォルト";
       // 
-      // toolStripDropDownButton1
+      // deckB
       // 
-      this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-      this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.書き出すToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.動画Aを読み込むToolStripMenuItem,
-            this.動画Bを読み込むToolStripMenuItem});
-      this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-      this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-      this.toolStripDropDownButton1.Size = new System.Drawing.Size(53, 22);
-      this.toolStripDropDownButton1.Text = "メニュー";
+      this.deckB.Image = ((System.Drawing.Image)(resources.GetObject("deckB.Image")));
+      this.deckB.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.deckB.Name = "deckB";
+      this.deckB.Size = new System.Drawing.Size(34, 22);
+      this.deckB.Text = "B";
+      this.deckB.Click += new System.EventHandler(this.deckB_Click);
       // 
-      // 書き出すToolStripMenuItem
+      // deckA
       // 
-      this.書き出すToolStripMenuItem.Name = "書き出すToolStripMenuItem";
-      this.書き出すToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-      this.書き出すToolStripMenuItem.Text = "書き出す(&E) ...";
-      this.書き出すToolStripMenuItem.Click += new System.EventHandler(this.export_Click);
+      this.deckA.Image = ((System.Drawing.Image)(resources.GetObject("deckA.Image")));
+      this.deckA.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.deckA.Name = "deckA";
+      this.deckA.Size = new System.Drawing.Size(35, 22);
+      this.deckA.Text = "A";
+      this.deckA.Click += new System.EventHandler(this.deckA_Click);
       // 
-      // toolStripMenuItem1
+      // export
       // 
-      this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-      this.toolStripMenuItem1.Size = new System.Drawing.Size(169, 6);
+      this.export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.export.Image = ((System.Drawing.Image)(resources.GetObject("export.Image")));
+      this.export.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.export.Name = "export";
+      this.export.Size = new System.Drawing.Size(63, 22);
+      this.export.Text = "書き出す...";
+      this.export.Click += new System.EventHandler(this.export_Click);
       // 
-      // 動画Aを読み込むToolStripMenuItem
+      // toolStripSeparator4
       // 
-      this.動画Aを読み込むToolStripMenuItem.Name = "動画Aを読み込むToolStripMenuItem";
-      this.動画Aを読み込むToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-      this.動画Aを読み込むToolStripMenuItem.Text = "動画Aを読み込む ...";
-      // 
-      // 動画Bを読み込むToolStripMenuItem
-      // 
-      this.動画Bを読み込むToolStripMenuItem.Name = "動画Bを読み込むToolStripMenuItem";
-      this.動画Bを読み込むToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-      this.動画Bを読み込むToolStripMenuItem.Text = "動画Bを読み込む ...";
+      this.toolStripSeparator4.Name = "toolStripSeparator4";
+      this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
       // 
       // PlayerWindow
       // 
@@ -312,10 +313,9 @@ namespace gokart_vanal
     private System.Windows.Forms.ToolStripButton next6frames;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     private System.Windows.Forms.ToolStrip toolStripDefault;
-    private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-    private System.Windows.Forms.ToolStripMenuItem 書き出すToolStripMenuItem;
-    private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-    private System.Windows.Forms.ToolStripMenuItem 動画Aを読み込むToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem 動画Bを読み込むToolStripMenuItem;
+    private System.Windows.Forms.ToolStripButton deckB;
+    private System.Windows.Forms.ToolStripButton deckA;
+    private System.Windows.Forms.ToolStripButton export;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
   }
 }

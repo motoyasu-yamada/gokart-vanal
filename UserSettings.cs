@@ -46,19 +46,27 @@ namespace gokart_vanal
     public int ImageDecompositionIntervalMillis { get; set; } = 200;
   }
 
+  [Serializable]
+  public enum VideoScalingMethod
+  {
+    FitToScreen,
+    SameRatio
+  }
+
   [Serializable()]
   public class DeckItem
   {
     public string VideoPath { get; set; }
-    public int VerticalOffset { get; set; } = 0;
-    public int HorizontalOffset { get; set; } = 0;
+    public int OffsetPercent { get; set; } = 15;
+    public int ScalePercent { get; set; } = 50;
+    public VideoScalingMethod VideoScalingMethod { get; set; } = VideoScalingMethod.FitToScreen;
   }
 
 
   [Serializable]
   public class DeckSettings
   {
-    public ArrangeModes ArrangeMode { get; set; } = ArrangeModes.Vertical;
+    public ArrangeMode ArrangeMode { get; set; } = ArrangeMode.Vertical;
 
     public DeckItem A { get; set; } = new DeckItem();
 
@@ -70,7 +78,7 @@ namespace gokart_vanal
   [Serializable()]
   public class HistorySettings
   {
-    public ArrangeModes ArrangeMode { get; set; } = ArrangeModes.Vertical;
+    public ArrangeMode ArrangeMode { get; set; } = ArrangeMode.Vertical;
     public List<VideoHistoryItem> VideoHistory { get; set; } = new List<VideoHistoryItem>();
     public List<MakerHistoryItem> MakerHistoryItem { get; set; } = new List<MakerHistoryItem>();
   }
