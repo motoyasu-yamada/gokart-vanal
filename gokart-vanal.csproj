@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,6 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="alfano6\LapQuantum50hz.cs" />
+    <Compile Include="alfano6\Reader.cs" />
+    <Compile Include="alfano6\CsvParser.cs" />
+    <Compile Include="alfano6\Lap.cs" />
+    <Compile Include="alfano6\Session.cs" />
     <Compile Include="ArrangeMode.cs" />
     <Compile Include="ExportForm.cs">
       <SubType>Form</SubType>
@@ -62,6 +68,7 @@
     <Compile Include="DeckEditForm.Designer.cs">
       <DependentUpon>DeckEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileTypeDetector.cs" />
     <Compile Include="Marker.cs" />
     <Compile Include="MarkerNameModal.cs">
       <SubType>Form</SubType>
@@ -127,6 +134,9 @@
     </PackageReference>
     <PackageReference Include="OpenCvSharp4.runtime.win">
       <Version>4.5.1.20210210</Version>
+    </PackageReference>
+    <PackageReference Include="System.IO.Compression">
+      <Version>4.3.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

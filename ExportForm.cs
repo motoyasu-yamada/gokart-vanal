@@ -12,15 +12,11 @@ namespace gokart_vanal
 {
   public partial class ExportForm : Form
   {
-    private VideoCapture videoCaptureA;
-    private VideoCapture videoCaptureB;
-    private PlayData playData;
+    private PlayingDeck playingDeck;
 
-    public ExportForm(VideoCapture videoCaptureA, VideoCapture videoCaptureB, PlayData playData)
+    public ExportForm(PlayingDeck playingDeck)
     {
-      this.videoCaptureA = videoCaptureA;
-      this.videoCaptureB = videoCaptureB;
-      this.playData = playData;
+      this.playingDeck = playingDeck;
 
       InitializeComponent();
 
@@ -89,11 +85,12 @@ namespace gokart_vanal
     {
       var a = (ExportImageSettings)e.Argument;
       var framesOfInterval = a.ImageDecompositionIntervalMillis / 100 * 6;
-      var startFrameA = playData.CurrentFramePosA;
-      var startFrameB = playData.CurrentFramePosB;
+      var startFrameA = playingDeck.A.CurrentFramePos;
+      var startFrameB = playingDeck.B.CurrentFramePos;
       var matA = new Mat();
       var matB = new Mat();
-
+      var videoCaptureA = playingDeck.A.VideoCapture;
+      var videoCaptureB = playingDeck.B.VideoCapture;
       var bmp = new Bitmap(videoCaptureA.FrameWidth, videoCaptureA.FrameHeight, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
 

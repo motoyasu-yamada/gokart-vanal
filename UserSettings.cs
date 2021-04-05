@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Xml.Serialization;
-using static gokart_vanal.PlayData;
 
 namespace gokart_vanal
 {
@@ -36,13 +34,9 @@ namespace gokart_vanal
   [Serializable()]
   public class ExportSettings
   {
-    [SettingsSerializeAs(SettingsSerializeAs.String)]
     public string Folder { get; set; }
-    [SettingsSerializeAs(SettingsSerializeAs.String)]
     public string FileNameTemplate { get; set; }
-    [SettingsSerializeAs(SettingsSerializeAs.String)]
     public int LengthMillis { get; set; } = 3000;
-    [SettingsSerializeAs(SettingsSerializeAs.String)]
     public int ImageDecompositionIntervalMillis { get; set; } = 200;
   }
 
@@ -57,6 +51,8 @@ namespace gokart_vanal
   public class DeckItem
   {
     public string VideoPath { get; set; }
+    public string Alfano6Path { get; set; }
+    public int Alfano6Offset { get; set; } = 0;
     public int OffsetPercent { get; set; } = 15;
     public int ScalePercent { get; set; } = 50;
     public VideoScalingMethod VideoScalingMethod { get; set; } = VideoScalingMethod.FitToScreen;

@@ -1,13 +1,37 @@
-﻿using System.ComponentModel;
+﻿using OpenCvSharp;
+using System.ComponentModel;
 
 namespace gokart_vanal
 {
-  public class PlayData : INotifyPropertyChanged
+  public class PlayingDeckItem
   {
-    private int currentFramePosA;
-    private int currentFramePosB;
-    public int CurrentFramePosA { get { return currentFramePosA; } set { currentFramePosA = value; NotifyPropertyChanged(nameof(CurrentFramePosA)); } }
-    public int CurrentFramePosB { get { return currentFramePosB; } set { currentFramePosB = value; NotifyPropertyChanged(nameof(CurrentFramePosB)); } }
+    private VideoCapture videoCapture;
+
+    public VideoCapture VideoCapture
+    {
+      get { return this.videoCapture; }
+      set
+      {
+        if (videoCapture != null)
+        {
+          videoCapture.Dispose();
+        }
+        videoCapture = value;
+      }
+    }
+
+    public alfano6.Session Session { get; set; }
+
+    private int currentFramePos;
+    public int CurrentFramePos
+    {
+      get { return currentFramePos; }
+      set
+      {
+        currentFramePos = value;
+        NotifyPropertyChanged(nameof(CurrentFramePos));
+      }
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
     private void NotifyPropertyChanged(string propertyName = "")
@@ -16,6 +40,24 @@ namespace gokart_vanal
       {
         PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
       }
+    }
+  }
+
+  public class PlayingDeck
+  {
+    public PlayingDeckItem A { get; } = new PlayingDeckItem();
+    public PlayingDeckItem B { get; } = new PlayingDeckItem();
+
+    public void Move(int offset)
+    {
+      A.CurrentFramePos += offset;
+      B.CurrentFramePos += offset;
+    }
+
+    public void SetCurrentFrame(int[] frame)
+    {
+      A.CurrentFramePos = frame[0];
+      B.CurrentFramePos = frame[1];
     }
   }
 }

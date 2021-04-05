@@ -15,21 +15,23 @@ namespace gokart_vanal
   {
     private PlayerWindow playerWindow;
     private DeckItem deckItem;
-    private VideoCapture videoCapture;
+    private PlayingDeckItem playingDeckItem;
 
-    public DeckEditForm(PlayerWindow playerWindow, DeckItem deckItem, VideoCapture videoCapture)
+    public DeckEditForm(PlayerWindow playerWindow, DeckItem deckItem, PlayingDeckItem playingDeckItem)
     {
       this.playerWindow = playerWindow;
       this.deckItem = deckItem;
-      this.videoCapture = videoCapture;
+      this.playingDeckItem = playingDeckItem;
       InitializeComponent();
 
       videoPath.Text = deckItem.VideoPath;
-      fps.Text = videoCapture.Fps.ToString();
-      frameCount.Text = videoCapture.FrameCount.ToString();
+      fps.Text = playingDeckItem.VideoCapture.Fps.ToString();
+      frameCount.Text = playingDeckItem.VideoCapture.FrameCount.ToString();
       SelectScalingMethod(deckItem.VideoScalingMethod);
       scalePercent.Text = deckItem.ScalePercent.ToString();
       offsetPercent.Text = deckItem.OffsetPercent.ToString();
+      alfano6Path.Text = deckItem.Alfano6Path;
+      alfano6Offset.Text = deckItem.Alfano6Offset.ToString();
     }
 
     private void SelectScalingMethod(VideoScalingMethod method)
@@ -58,6 +60,19 @@ namespace gokart_vanal
     private void DeckEditForm_FormClosed(object sender, FormClosedEventArgs e)
     {
       Program.UserSettings.Save();
+    }
+
+    private void setAlfano6OffsetToCurrentFrame_Click(object sender, EventArgs e)
+    {
+      deckItem.Alfano6Offset = playingDeckItem.CurrentFramePos;
+      alfano6Offset.Text = deckItem.Alfano6Offset.ToString();
+      playerWindow.RefreshVideo();
+    }
+
+    private void alfano6Offset_TextChanged(object sender, EventArgs e)
+    {
+      deckItem.Alfano6Offset = int.Parse(alfano6Offset.Text);
+      playerWindow.RefreshVideo();
     }
   }
 }

@@ -3,15 +3,15 @@ using OpenCvSharp.Extensions;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Windows.Foundation;
+using Windows.UI.Xaml.Media;
 
 namespace gokart_vanal
 {
   public partial class PlayerWindow : Form
   {
     private BindingSource markerBindingSource;
-    private PlayData playData { get; } = new PlayData();
-    private VideoCapture videoCaptureA;
-    private VideoCapture videoCaptureB;
+    private PlayingDeck playingDeck { get; } = new PlayingDeck();
 
     public PlayerWindow()
     {
@@ -23,26 +23,21 @@ namespace gokart_vanal
       markers.ComboBox.DisplayMember = nameof(Marker.Display);
       markers.ComboBox.ValueMember = nameof(Marker.Display);
 
-      currentFramePosA.TextBox.DataBindings.Add(nameof(currentFramePosA.TextBox.Text), playData, nameof(playData.CurrentFramePosA), true, DataSourceUpdateMode.OnPropertyChanged);
-      hScrollBarA.DataBindings.Add(nameof(hScrollBarA.Value), playData, nameof(playData.CurrentFramePosA), true, DataSourceUpdateMode.OnPropertyChanged);
-      currentFramePosB.TextBox.DataBindings.Add(nameof(currentFramePosB.TextBox.Text), playData, nameof(playData.CurrentFramePosB), true, DataSourceUpdateMode.OnPropertyChanged);
-      hScrollBarB.DataBindings.Add(nameof(hScrollBarB.Value), playData, nameof(playData.CurrentFramePosB), true, DataSourceUpdateMode.OnPropertyChanged);
+      currentFramePosA.TextBox.DataBindings.Add(nameof(currentFramePosA.TextBox.Text), playingDeck.A, nameof(PlayingDeckItem.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
+      hScrollBarA.DataBindings.Add(nameof(hScrollBarA.Value), playingDeck.A, nameof(PlayingDeckItem.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
+      currentFramePosB.TextBox.DataBindings.Add(nameof(currentFramePosB.TextBox.Text), playingDeck.B, nameof(PlayingDeckItem.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
+      hScrollBarB.DataBindings.Add(nameof(hScrollBarB.Value), playingDeck.B, nameof(PlayingDeckItem.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
 
-      LoadVideos();
+      ReloadVideoAndAlfano6();
     }
 
-    private void SetVideoA(string videoPathA)
+    private void SetVideoA(DeckItem deckItem, PlayingDeckItem playingDeckItem, string videoPath)
     {
-      if (this.videoCaptureA != null)
+      deckItem.VideoPath = videoPath;
+      if (videoPath != null)
       {
-        this.videoCaptureA.Dispose();
-        this.videoCaptureA = null;
-      }
-
-      if (videoPathA != null)
-      {
-        this.videoCaptureA = new VideoCapture(videoPathA);
-        this.hScrollBarA.Maximum = this.videoCaptureA.FrameCount;
+        playingDeckItem.VideoCapture = new VideoCapture(videoPath);
+        this.hScrollBarA.Maximum = playingDeckItem.VideoCapture.FrameCount;
         this.hScrollBarA.Enabled = true;
         this.currentFramePosA.Enabled = true;
       }
@@ -52,20 +47,16 @@ namespace gokart_vanal
         this.hScrollBarA.Enabled = false;
         this.currentFramePosA.Enabled = false;
       }
-      Program.UserSettings.Deck.A.VideoPath = videoPathA;
+      playingDeckItem.CurrentFramePos = 0;
     }
 
-    private void SetVideoB(string videoPathB)
+    private void SetVideoB(DeckItem deckItem, PlayingDeckItem playingDeckItem, string videoPath)
     {
-      if (this.videoCaptureB != null)
+      deckItem.VideoPath = videoPath;
+      if (videoPath != null)
       {
-        this.videoCaptureB.Dispose();
-        this.videoCaptureB = null;
-      }
-      if (videoPathB != null)
-      {
-        this.videoCaptureB = new VideoCapture(videoPathB);
-        this.hScrollBarB.Maximum = this.videoCaptureB.FrameCount;
+        playingDeckItem.VideoCapture = new VideoCapture(videoPath);
+        this.hScrollBarB.Maximum = playingDeckItem.VideoCapture.FrameCount;
         this.currentFramePosB.Enabled = true;
         this.hScrollBarB.Enabled = true;
       }
@@ -75,15 +66,18 @@ namespace gokart_vanal
         this.hScrollBarB.Enabled = false;
         this.currentFramePosB.Enabled = false;
       }
-      Program.UserSettings.Deck.B.VideoPath = videoPathB;
+      playingDeckItem.CurrentFramePos = 0;
     }
 
-    private void LoadVideos()
+    private void ReloadVideoAndAlfano6()
     {
-      SetVideoA(Program.UserSettings.Deck.A.VideoPath);
-      SetVideoB(Program.UserSettings.Deck.B.VideoPath);
+      SetVideoA(Program.UserSettings.Deck.A, playingDeck.A, Program.UserSettings.Deck.A.VideoPath);
+      SetVideoB(Program.UserSettings.Deck.B, playingDeck.B, Program.UserSettings.Deck.B.VideoPath);
       markerBindingSource.ResetBindings(false);
       markers.Enabled = markerBindingSource.Count > 0;
+
+      playingDeck.A.Session = new alfano6.Reader().Read(Program.UserSettings.Deck.A.Alfano6Path);
+      playingDeck.B.Session = new alfano6.Reader().Read(Program.UserSettings.Deck.B.Alfano6Path);
 
       pictureBoxVideo.Invalidate();
     }
@@ -120,8 +114,7 @@ namespace gokart_vanal
 
     private void MoveFrame(int offset)
     {
-      playData.CurrentFramePosA += offset;
-      playData.CurrentFramePosB += offset;
+      playingDeck.Move(offset);
       pictureBoxVideo.Invalidate();
     }
 
@@ -147,7 +140,7 @@ namespace gokart_vanal
 
     private void export_Click(object sender, EventArgs e)
     {
-      var form = new ExportForm(videoCaptureA, videoCaptureB, playData);
+      var form = new ExportForm(playingDeck);
       var dr = form.ShowDialog();
 
 
@@ -157,11 +150,14 @@ namespace gokart_vanal
     private SolidBrush dragBrush = new SolidBrush(Color.Red);
     private SolidBrush noneBrush = new SolidBrush(Color.DarkGray);
     private SolidBrush nullBrash = new SolidBrush(Color.Black);
+    private SolidBrush textBrash = new SolidBrush(Color.White);
+    private Font fontTitle = new Font("ＭＳ ゴシック", 32);
+    private Font fontDetail = new Font("ＭＳ ゴシック", 16);
 
     private RectangleF NewSrcRect(Bitmap bitmap, DeckItem deckItem, RectangleF dst)
     {
       var height = bitmap.Height * deckItem.ScalePercent / 100;
-      var top = (bitmap.Height - height)/ 2 + bitmap.Height * deckItem.OffsetPercent / 100;
+      var top = (bitmap.Height - height) / 2 + bitmap.Height * deckItem.OffsetPercent / 100;
 
       if (deckItem.VideoScalingMethod == VideoScalingMethod.FitToScreen)
       {
@@ -173,74 +169,66 @@ namespace gokart_vanal
       return new RectangleF(left, top, width, height);
     }
 
+    private void PaintDeck(Graphics g, bool dragging, PlayingDeckItem playing, DeckItem deck, RectangleF dst)
+    {
+      if (dragging)
+      {
+        g.FillRectangle(dragBrush, dst);
+      }
+      else
+      {
+        g.FillRectangle(nullBrash, dst);
+        using (var mat = new Mat())
+        {
+          if (playing.VideoCapture != null)
+          {
+            playing.VideoCapture.Set(VideoCaptureProperties.PosFrames, playing.CurrentFramePos);
+            playing.VideoCapture.Read(mat);
+          }
+
+          if (mat.Empty())
+          {
+            g.FillRectangle(noneBrush, dst);
+          }
+          else
+          {
+            using (var image = BitmapConverter.ToBitmap(mat))
+            {
+              RectangleF src = NewSrcRect(image, deck, dst);
+              g.DrawImage(image, dst, src, GraphicsUnit.Pixel);
+            }
+          }
+        }
+        if (playing.Session != null)
+        {
+          var (t, l, q) = playing.Session.GetInfo(playing.CurrentFramePos, playing.VideoCapture.Fps, deck.Alfano6Offset);
+          var detail = "";
+          if (l != null)
+          {
+            detail += $"#{l.LapNumber:00}";
+          }
+          else
+          {
+            detail += $"#--";
+          }
+          detail += $", E:{(double)t / 1000:000.00}";
+          if (l != null)
+          {
+            detail += $", T:{l.LapTime:000.00}, RPM:{q.RPM:00000}, Speed:{q.Speed:000.0}, Exaust: {q.ExaustTemperature:000}";
+          }
+          g.DrawString(detail, fontDetail, textBrash, dst.Left + 10, dst.Top + 10);
+        }
+      }
+    }
+
     private void pictureBoxVideo_Paint(object sender, PaintEventArgs e)
     {
-      
+
       var rectA = new RectangleF(0, 0, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
       var rectB = new RectangleF(0, pictureBoxVideo.Height / 2, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
-      
-      if (drag == Drag.OnA)
-      {
-        e.Graphics.FillRectangle(dragBrush, rectA);
-      }
-      else
-      {
-        e.Graphics.FillRectangle(nullBrash, rectA);
-        using (var matA = new Mat())
-        {
-          if (videoCaptureA != null)
-          {
-            videoCaptureA.Set(VideoCaptureProperties.PosFrames, playData.CurrentFramePosA);
-            videoCaptureA.Read(matA);
-          }
 
-          if (matA.Empty())
-          {
-            e.Graphics.FillRectangle(noneBrush, rectA);
-          }
-          else
-          {
-            using (var imageA = BitmapConverter.ToBitmap(matA))
-            {
-              e.Graphics.DrawImage(imageA,
-              rectA,
-              NewSrcRect(imageA, Program.UserSettings.Deck.A, rectA),
-              GraphicsUnit.Pixel);
-            }
-          }
-        }
-      }
-      if (drag == Drag.OnB)
-      {
-        e.Graphics.FillRectangle(dragBrush, rectB);
-      }
-      else
-      {
-        e.Graphics.FillRectangle(nullBrash, rectB);
-        using (var matB = new Mat())
-        {
-          if (videoCaptureB != null)
-          {
-            videoCaptureB.Set(VideoCaptureProperties.PosFrames, playData.CurrentFramePosB);
-            videoCaptureB.Read(matB);
-          }
-
-          if (matB.Empty())
-          {
-            e.Graphics.FillRectangle(noneBrush, rectB);
-          }
-          else
-          {
-            using (var imageB = BitmapConverter.ToBitmap(matB))
-            {
-              e.Graphics.DrawImage(imageB,
-                  rectB,
-                  NewSrcRect(imageB, Program.UserSettings.Deck.B, rectB),
-                  GraphicsUnit.Pixel);
-            }
-          }
-        }
-      }
+      PaintDeck(e.Graphics, drag == Drag.OnA, playingDeck.A, Program.UserSettings.Deck.A, rectA);
+      PaintDeck(e.Graphics, drag == Drag.OnB, playingDeck.B, Program.UserSettings.Deck.B, rectB);
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -285,8 +273,7 @@ namespace gokart_vanal
         return;
       }
       var m = (Marker)markerBindingSource[i];
-      playData.CurrentFramePosA = m.frameA;
-      playData.CurrentFramePosB = m.frameB;
+      playingDeck.SetCurrentFrame(new int[] { m.frameA, m.frameB });
       pictureBoxVideo.Invalidate();
     }
 
@@ -313,12 +300,28 @@ namespace gokart_vanal
       switch (OnAOrB(e))
       {
         case Drag.OnA:
-          SetVideoA(filePath);
-          this.playData.CurrentFramePosA = 0;
+          if (FileTypeDetector.Detect(filePath) == FileType.Video)
+          {
+            SetVideoA(Program.UserSettings.Deck.A, playingDeck.A, filePath);
+
+          }
+          else
+          {
+            Program.UserSettings.Deck.A.Alfano6Path = filePath;
+            playingDeck.A.Session = new alfano6.Reader().Read(filePath);            
+          }
           break;
         case Drag.OnB:
-          SetVideoB(filePath);
-          this.playData.CurrentFramePosB = 0;
+          if (FileTypeDetector.Detect(filePath) == FileType.Video)
+          {
+            SetVideoB(Program.UserSettings.Deck.B, playingDeck.B, filePath);
+
+          }
+          else
+          {
+            Program.UserSettings.Deck.B.Alfano6Path = filePath;
+            playingDeck.B.Session = new alfano6.Reader().Read(filePath);
+          }
           break;
       }
       this.markerBindingSource.Clear();
@@ -374,13 +377,13 @@ namespace gokart_vanal
 
     private void deckA_Click(object sender, EventArgs e)
     {
-      var f = new DeckEditForm(this, Program.UserSettings.Deck.A, videoCaptureA);
+      var f = new DeckEditForm(this, Program.UserSettings.Deck.A, playingDeck.A);
       f.ShowDialog();
     }
 
     private void deckB_Click(object sender, EventArgs e)
     {
-      var f = new DeckEditForm(this, Program.UserSettings.Deck.B, videoCaptureB);
+      var f = new DeckEditForm(this, Program.UserSettings.Deck.B, playingDeck.B);
       f.ShowDialog();
     }
   }
