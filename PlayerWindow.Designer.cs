@@ -34,7 +34,6 @@ namespace gokart_vanal
       this.hScrollBarA = new System.Windows.Forms.HScrollBar();
       this.hScrollBarB = new System.Windows.Forms.HScrollBar();
       this.currentFramePosA = new System.Windows.Forms.ToolStripTextBox();
-      this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
       this.currentFramePosB = new System.Windows.Forms.ToolStripTextBox();
       this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
       this.markers = new System.Windows.Forms.ToolStripComboBox();
@@ -47,10 +46,12 @@ namespace gokart_vanal
       this.next6frames = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
       this.toolStripDefault = new System.Windows.Forms.ToolStrip();
-      this.deckB = new System.Windows.Forms.ToolStripButton();
       this.deckA = new System.Windows.Forms.ToolStripButton();
-      this.export = new System.Windows.Forms.ToolStripButton();
+      this.deckB = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+      this.export = new System.Windows.Forms.ToolStripButton();
+      this.jumpToLapA = new System.Windows.Forms.ToolStripComboBox();
+      this.jumpToLapB = new System.Windows.Forms.ToolStripComboBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
       this.toolStripDefault.SuspendLayout();
       this.SuspendLayout();
@@ -103,12 +104,6 @@ namespace gokart_vanal
       this.currentFramePosA.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       this.currentFramePosA.ToolTipText = "A画面(上または左)のフレーム位置";
       // 
-      // toolStripLabel1
-      // 
-      this.toolStripLabel1.Name = "toolStripLabel1";
-      this.toolStripLabel1.Size = new System.Drawing.Size(12, 22);
-      this.toolStripLabel1.Text = "/";
-      // 
       // currentFramePosB
       // 
       this.currentFramePosB.AutoSize = false;
@@ -139,8 +134,8 @@ namespace gokart_vanal
       this.createMarker.Image = ((System.Drawing.Image)(resources.GetObject("createMarker.Image")));
       this.createMarker.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.createMarker.Name = "createMarker";
-      this.createMarker.Size = new System.Drawing.Size(35, 22);
-      this.createMarker.Text = "保存";
+      this.createMarker.Size = new System.Drawing.Size(44, 22);
+      this.createMarker.Text = "保存...";
       this.createMarker.ToolTipText = "現在の上画面と下画面のフレーム位置をマーカーとして保存します。";
       this.createMarker.Click += new System.EventHandler(this.createMarker_Click);
       // 
@@ -216,22 +211,23 @@ namespace gokart_vanal
       this.toolStripDefault.GripMargin = new System.Windows.Forms.Padding(6);
       this.toolStripDefault.ImeMode = System.Windows.Forms.ImeMode.Off;
       this.toolStripDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deckA,
+            this.jumpToLapA,
             this.currentFramePosA,
-            this.toolStripLabel1,
+            this.toolStripSeparator4,
+            this.deckB,
+            this.jumpToLapB,
             this.currentFramePosB,
             this.toolStripSeparator1,
-            this.markers,
-            this.createMarker,
-            this.deleteMarker,
-            this.toolStripSeparator2,
             this.prev6frames,
             this.prev1frame,
             this.next1frame,
             this.next6frames,
             this.toolStripSeparator3,
-            this.deckA,
-            this.deckB,
-            this.toolStripSeparator4,
+            this.markers,
+            this.createMarker,
+            this.deleteMarker,
+            this.toolStripSeparator2,
             this.export});
       this.toolStripDefault.Location = new System.Drawing.Point(0, 0);
       this.toolStripDefault.Name = "toolStripDefault";
@@ -239,23 +235,30 @@ namespace gokart_vanal
       this.toolStripDefault.TabIndex = 1;
       this.toolStripDefault.Text = "デフォルト";
       // 
-      // deckB
-      // 
-      this.deckB.Image = ((System.Drawing.Image)(resources.GetObject("deckB.Image")));
-      this.deckB.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.deckB.Name = "deckB";
-      this.deckB.Size = new System.Drawing.Size(34, 22);
-      this.deckB.Text = "B";
-      this.deckB.Click += new System.EventHandler(this.deckB_Click);
-      // 
       // deckA
       // 
+      this.deckA.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
       this.deckA.Image = ((System.Drawing.Image)(resources.GetObject("deckA.Image")));
       this.deckA.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.deckA.Name = "deckA";
-      this.deckA.Size = new System.Drawing.Size(35, 22);
-      this.deckA.Text = "A";
+      this.deckA.Size = new System.Drawing.Size(44, 22);
+      this.deckA.Text = "A(&A)...";
       this.deckA.Click += new System.EventHandler(this.deckA_Click);
+      // 
+      // deckB
+      // 
+      this.deckB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.deckB.Image = ((System.Drawing.Image)(resources.GetObject("deckB.Image")));
+      this.deckB.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.deckB.Name = "deckB";
+      this.deckB.Size = new System.Drawing.Size(42, 22);
+      this.deckB.Text = "B(&B)...";
+      this.deckB.Click += new System.EventHandler(this.deckB_Click);
+      // 
+      // toolStripSeparator4
+      // 
+      this.toolStripSeparator4.Name = "toolStripSeparator4";
+      this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
       // 
       // export
       // 
@@ -267,10 +270,19 @@ namespace gokart_vanal
       this.export.Text = "書き出す...";
       this.export.Click += new System.EventHandler(this.export_Click);
       // 
-      // toolStripSeparator4
+      // jumpToLapA
       // 
-      this.toolStripSeparator4.Name = "toolStripSeparator4";
-      this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+      this.jumpToLapA.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.jumpToLapA.Name = "jumpToLapA";
+      this.jumpToLapA.Size = new System.Drawing.Size(121, 25);
+      this.jumpToLapA.SelectedIndexChanged += new System.EventHandler(this.jumpToLapA_SelectedIndexChanged);
+      // 
+      // jumpToLapB
+      // 
+      this.jumpToLapB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.jumpToLapB.Name = "jumpToLapB";
+      this.jumpToLapB.Size = new System.Drawing.Size(121, 25);
+      this.jumpToLapB.SelectedIndexChanged += new System.EventHandler(this.jumpToLapB_SelectedIndexChanged);
       // 
       // PlayerWindow
       // 
@@ -300,7 +312,6 @@ namespace gokart_vanal
     private System.Windows.Forms.HScrollBar hScrollBarA;
     private System.Windows.Forms.HScrollBar hScrollBarB;
     private System.Windows.Forms.ToolStripTextBox currentFramePosA;
-    private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     private System.Windows.Forms.ToolStripTextBox currentFramePosB;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     private System.Windows.Forms.ToolStripComboBox markers;
@@ -317,5 +328,7 @@ namespace gokart_vanal
     private System.Windows.Forms.ToolStripButton deckA;
     private System.Windows.Forms.ToolStripButton export;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+    private System.Windows.Forms.ToolStripComboBox jumpToLapA;
+    private System.Windows.Forms.ToolStripComboBox jumpToLapB;
   }
 }

@@ -37,16 +37,8 @@ namespace gokart_vanal
       if (videoPath != null)
       {
         playingDeckItem.VideoCapture = new VideoCapture(videoPath);
-        this.hScrollBarA.Maximum = playingDeckItem.VideoCapture.FrameCount;
-        this.hScrollBarA.Enabled = true;
-        this.currentFramePosA.Enabled = true;
       }
-      else
-      {
-        this.hScrollBarA.Maximum = 0;
-        this.hScrollBarA.Enabled = false;
-        this.currentFramePosA.Enabled = false;
-      }
+      UpdateControlAbilities();
       playingDeckItem.CurrentFramePos = 0;
     }
 
@@ -56,16 +48,8 @@ namespace gokart_vanal
       if (videoPath != null)
       {
         playingDeckItem.VideoCapture = new VideoCapture(videoPath);
-        this.hScrollBarB.Maximum = playingDeckItem.VideoCapture.FrameCount;
-        this.currentFramePosB.Enabled = true;
-        this.hScrollBarB.Enabled = true;
       }
-      else
-      {
-        this.hScrollBarB.Maximum = 0;
-        this.hScrollBarB.Enabled = false;
-        this.currentFramePosB.Enabled = false;
-      }
+      UpdateControlAbilities();
       playingDeckItem.CurrentFramePos = 0;
     }
 
@@ -76,10 +60,10 @@ namespace gokart_vanal
       markerBindingSource.ResetBindings(false);
       markers.Enabled = markerBindingSource.Count > 0;
 
-      playingDeck.A.Session = new alfano6.Reader().Read(Program.UserSettings.Deck.A.Alfano6Path);
-      playingDeck.B.Session = new alfano6.Reader().Read(Program.UserSettings.Deck.B.Alfano6Path);
+      SetAlfano6(Program.UserSettings.Deck.A.Alfano6Path, Program.UserSettings.Deck.A, playingDeck.A, jumpToLapA.ComboBox);
+      SetAlfano6(Program.UserSettings.Deck.B.Alfano6Path, Program.UserSettings.Deck.B, playingDeck.B, jumpToLapB.ComboBox);
 
-      pictureBoxVideo.Invalidate();
+      RefreshVideo();
     }
 
     public void RefreshVideo()
@@ -89,27 +73,27 @@ namespace gokart_vanal
 
     private void hScrollBarA_ValueChanged(object sender, EventArgs e)
     {
-      pictureBoxVideo.Invalidate();
+      RefreshVideo();
     }
 
     private void hScrollBarB_ValueChanged(object sender, EventArgs e)
     {
-      pictureBoxVideo.Invalidate();
+      RefreshVideo();
     }
 
     private void PlayerWindow_Activated(object sender, EventArgs e)
     {
-      pictureBoxVideo.Invalidate();
+      RefreshVideo();
     }
 
     private void PlayerWindow_Resize(object sender, EventArgs e)
     {
-      pictureBoxVideo.Invalidate();
+      RefreshVideo();
     }
 
     private void pictureBoxVideo_Resize(object sender, EventArgs e)
     {
-      pictureBoxVideo.Invalidate();
+      RefreshVideo();
     }
 
     private void MoveFrame(int offset)
@@ -307,8 +291,7 @@ namespace gokart_vanal
           }
           else
           {
-            Program.UserSettings.Deck.A.Alfano6Path = filePath;
-            playingDeck.A.Session = new alfano6.Reader().Read(filePath);            
+            SetAlfano6(filePath, Program.UserSettings.Deck.A, playingDeck.A, jumpToLapA.ComboBox);
           }
           break;
         case Drag.OnB:
@@ -319,8 +302,7 @@ namespace gokart_vanal
           }
           else
           {
-            Program.UserSettings.Deck.B.Alfano6Path = filePath;
-            playingDeck.B.Session = new alfano6.Reader().Read(filePath);
+            SetAlfano6(filePath, Program.UserSettings.Deck.B, playingDeck.B, jumpToLapB.ComboBox);
           }
           break;
       }
@@ -385,6 +367,75 @@ namespace gokart_vanal
     {
       var f = new DeckEditForm(this, Program.UserSettings.Deck.B, playingDeck.B);
       f.ShowDialog();
+    }
+
+    private void SetAlfano6(string filePath, DeckItem deck, PlayingDeckItem playing, ComboBox jumpToLap)
+    {
+      playing.Session = new alfano6.Reader().Read(filePath);
+      var sessionIsValid = playing.Session != null;
+      if (sessionIsValid)
+      {
+        deck.Alfano6Path = filePath;
+        jumpToLap.Items.Clear();
+        foreach (var l in playing.Session.Laps) {
+          jumpToLap.Items.Add($"#{l.LapNumber} ({l.LapTime:000.00})");
+        }
+      }
+      else
+      {
+        jumpToLap.Items.Clear();
+      }
+      UpdateControlAbilities();
+    }
+
+    private void JumpToLap(int lapNumber, DeckItem deck, PlayingDeckItem playing)
+    {
+      int framePos = playing.Session.GetFramePos(lapNumber, playing.VideoCapture.Fps, deck.Alfano6Offset);
+      playing.CurrentFramePos = framePos;
+      Console.WriteLine($"lapNumber:{lapNumber}, framePos: {framePos}");
+    }
+
+    private void UpdateControlAbilities()
+    {
+      if (playingDeck.A.VideoCapture != null)
+      {
+        this.hScrollBarA.Maximum = playingDeck.A.VideoCapture.FrameCount;
+        this.hScrollBarA.Enabled = true;
+        this.currentFramePosA.Enabled = true;
+      }
+      else
+      {
+        this.hScrollBarA.Maximum = 0;
+        this.hScrollBarA.Enabled = false;
+        this.currentFramePosA.Enabled = false;
+      }
+      jumpToLapA.Enabled = playingDeck.A.Session != null;
+
+      if (playingDeck.B.VideoCapture != null)
+      {
+        this.hScrollBarB.Maximum = playingDeck.A.VideoCapture.FrameCount;
+        this.hScrollBarB.Enabled = true;
+        this.currentFramePosB.Enabled = true;
+      }
+      else
+      {
+        this.hScrollBarB.Maximum = 0;
+        this.hScrollBarB.Enabled = false;
+        this.currentFramePosB.Enabled = false;
+      }
+      jumpToLapB.Enabled = playingDeck.B.Session != null;
+    }
+
+    private void jumpToLapA_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      JumpToLap(jumpToLapA.SelectedIndex + 1, Program.UserSettings.Deck.A, playingDeck.A);
+      RefreshVideo();
+    }
+
+    private void jumpToLapB_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      JumpToLap(jumpToLapB.SelectedIndex + 1, Program.UserSettings.Deck.B, playingDeck.B);
+      RefreshVideo();
     }
   }
 }

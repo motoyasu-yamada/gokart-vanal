@@ -76,7 +76,7 @@
     <Compile Include="MarkerNameModal.Designer.cs">
       <DependentUpon>MarkerNameModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlayData.cs" />
+    <Compile Include="PlayDeck.cs" />
     <Compile Include="PlayerWindow.cs">
       <SubType>Form</SubType>
     </Compile>

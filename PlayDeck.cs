@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace gokart_vanal
 {
-  public class PlayingDeckItem
+  public class PlayingDeckItem : INotifyPropertyChanged
   {
     private VideoCapture videoCapture;
 

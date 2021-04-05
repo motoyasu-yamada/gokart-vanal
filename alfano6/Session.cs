@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace gokart_vanal.alfano6
 {
@@ -9,6 +10,17 @@ namespace gokart_vanal.alfano6
     public DateTime StartAt { get; set; }
     public Lap[] Laps { get; set; }
     public uint HzOfQuantums { get; } = 50;
+
+    public int GetFramePos(int lapNo, double videoFps, int offsetFrame)
+    {
+      Debug.Assert(1 <= lapNo && lapNo <= Laps.Length);
+      decimal elapsedMillis = 0;
+      for (var i = 0; i < lapNo - 1; i ++)
+      {
+        elapsedMillis += Laps[i].LapTime;
+      }
+      return (int)(elapsedMillis * (decimal)videoFps) + offsetFrame;
+    }
 
     public (int, Lap, LapQuantum50hz) GetInfo(int videoFrame, double videoFps, int offsetFrame)
     {
