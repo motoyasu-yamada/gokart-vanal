@@ -24,9 +24,14 @@ namespace gokart_vanal
       this.playingDeckItem = playingDeckItem;
       InitializeComponent();
 
+      UpdateControls();
+    }
+
+    private void UpdateControls()
+    {
       videoPath.Text = deckItem.VideoPath;
-      fps.Text = playingDeckItem.VideoCapture.Fps.ToString();
-      frameCount.Text = playingDeckItem.VideoCapture.FrameCount.ToString();
+      fps.Text = playingDeckItem.VideoCapture != null ? playingDeckItem.VideoCapture.Fps.ToString() : "-";
+      frameCount.Text = playingDeckItem.VideoCapture != null ? playingDeckItem.VideoCapture.FrameCount.ToString() : "-";
       SelectScalingMethod(deckItem.VideoScalingMethod);
       scalePercent.Text = deckItem.ScalePercent.ToString();
       offsetPercent.Text = deckItem.OffsetPercent.ToString();
@@ -73,6 +78,24 @@ namespace gokart_vanal
     {
       deckItem.Alfano6Offset = int.Parse(alfano6Offset.Text);
       playerWindow.RefreshVideo();
+    }
+
+    private void detachVideo_Click(object sender, EventArgs e)
+    {
+      deckItem.VideoPath = null;
+      deckItem.Alfano6Path = null;
+      playingDeckItem.VideoCapture = null;
+      playingDeckItem.Session = null;
+      playerWindow.RefreshVideo();
+      UpdateControls();
+    }
+
+    private void detachAlfano6_Click(object sender, EventArgs e)
+    {
+      deckItem.Alfano6Path = null;
+      playingDeckItem.Session = null;
+      playerWindow.RefreshVideo();
+      UpdateControls();
     }
   }
 }

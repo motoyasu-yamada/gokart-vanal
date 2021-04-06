@@ -123,9 +123,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FontAwesome.Sharp">
-      <Version>5.15.3</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.0.1</Version>
     </PackageReference>

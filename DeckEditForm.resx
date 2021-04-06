@@ -117,4 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="detachVideo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAD9SURBVDhPvVM7EoIwEM0FvIOVtaU1tdzBGbyBZ6DPFbyB
+        cgBGO1M6Q0/npwsN7Zq3k2USZJjYWDz27bLvkV1A9X2/drAe4JJTAE1EagowsNfDngBw+3p05+2G86qq
+        qCzLWRPVvZ8EwXG1YJFwRAiLohhMxmIAJ9iFJiJGDaKmaSjLMjnFlxHvQI4tBn6cQTiOkUEoRhQuO0g2
+        AMBlnGQDV+ARAHA03M1tUjhpgIsr8vv3nPI8/80gxJzwvwZt23LEIsM82UA+Y3BEMUoxOGmteZEQGWOo
+        rmvOUcf9sD8SA65h6WDRjCcKvBh/6TLsj8QCb3Jx4NkRfR6JiUh9AAGF99bObt1fAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="detachAlfano6.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        xAAADsQBlSsOGwAAAP1JREFUOE+9UzsSgjAQzQW8g5W1pTW13MEZvIFnoM8VvIFyAEY7UzpDT+enCw3t
+        mreTZRJkmNhYPPbtsu+RXUD1fb92sB7gklMATURqCjCw18OeAHD7enTn7YbzqqqoLMtZE9W9nwTBcbVg
+        kXBECIuiGEzGYgAn2IUmIkYNoqZpKMsyOcWXEe9Aji0GfpxBOI6RQShGFC47SDYAwGWcZANX4BEAcDTc
+        zW1SOGmAiyvy+/ec8jz/zSDEnPC/Bm3bcsQiwzzZQD5jcEQxSjE4aa15kRAZY6iua85Rx/2wPxIDrmHp
+        YNGMJwq8GH/pMuyPxAJvcnHg2RF9HomJSH0AAYX31s5u3V8AAAAASUVORK5CYII=
+</value>
+  </data>
 </root>

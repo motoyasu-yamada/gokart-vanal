@@ -29,6 +29,7 @@ namespace gokart_vanal
     /// </summary>
     private void InitializeComponent()
     {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DeckEditForm));
       this.label1 = new System.Windows.Forms.Label();
       this.videoPath = new System.Windows.Forms.TextBox();
       this.fps = new System.Windows.Forms.TextBox();
@@ -48,6 +49,8 @@ namespace gokart_vanal
       this.label10 = new System.Windows.Forms.Label();
       this.alfano6Offset = new System.Windows.Forms.TextBox();
       this.setAlfano6OffsetToCurrentFrame = new System.Windows.Forms.Button();
+      this.detachVideo = new System.Windows.Forms.Button();
+      this.detachAlfano6 = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // label1
@@ -64,7 +67,7 @@ namespace gokart_vanal
       this.videoPath.Location = new System.Drawing.Point(86, 19);
       this.videoPath.Name = "videoPath";
       this.videoPath.ReadOnly = true;
-      this.videoPath.Size = new System.Drawing.Size(485, 19);
+      this.videoPath.Size = new System.Drawing.Size(458, 19);
       this.videoPath.TabIndex = 1;
       // 
       // fps
@@ -164,7 +167,7 @@ namespace gokart_vanal
             "15",
             "20",
             "25"});
-      this.offsetPercent.Location = new System.Drawing.Point(111, 159);
+      this.offsetPercent.Location = new System.Drawing.Point(369, 124);
       this.offsetPercent.Name = "offsetPercent";
       this.offsetPercent.Size = new System.Drawing.Size(121, 20);
       this.offsetPercent.TabIndex = 12;
@@ -173,7 +176,7 @@ namespace gokart_vanal
       // label6
       // 
       this.label6.AutoSize = true;
-      this.label6.Location = new System.Drawing.Point(20, 163);
+      this.label6.Location = new System.Drawing.Point(278, 128);
       this.label6.Name = "label6";
       this.label6.Size = new System.Drawing.Size(49, 12);
       this.label6.TabIndex = 11;
@@ -182,7 +185,7 @@ namespace gokart_vanal
       // label7
       // 
       this.label7.AutoSize = true;
-      this.label7.Location = new System.Drawing.Point(238, 162);
+      this.label7.Location = new System.Drawing.Point(496, 127);
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(11, 12);
       this.label7.TabIndex = 14;
@@ -199,16 +202,16 @@ namespace gokart_vanal
       // 
       // alfano6Path
       // 
-      this.alfano6Path.Location = new System.Drawing.Point(83, 201);
+      this.alfano6Path.Location = new System.Drawing.Point(83, 173);
       this.alfano6Path.Name = "alfano6Path";
       this.alfano6Path.ReadOnly = true;
-      this.alfano6Path.Size = new System.Drawing.Size(485, 19);
+      this.alfano6Path.Size = new System.Drawing.Size(461, 19);
       this.alfano6Path.TabIndex = 16;
       // 
       // label9
       // 
       this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(17, 204);
+      this.label9.Location = new System.Drawing.Point(17, 176);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(55, 12);
       this.label9.TabIndex = 15;
@@ -217,7 +220,7 @@ namespace gokart_vanal
       // label10
       // 
       this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(17, 234);
+      this.label10.Location = new System.Drawing.Point(17, 206);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(49, 12);
       this.label10.TabIndex = 18;
@@ -225,7 +228,7 @@ namespace gokart_vanal
       // 
       // alfano6Offset
       // 
-      this.alfano6Offset.Location = new System.Drawing.Point(83, 231);
+      this.alfano6Offset.Location = new System.Drawing.Point(83, 203);
       this.alfano6Offset.Name = "alfano6Offset";
       this.alfano6Offset.Size = new System.Drawing.Size(165, 19);
       this.alfano6Offset.TabIndex = 17;
@@ -234,7 +237,7 @@ namespace gokart_vanal
       // 
       // setAlfano6OffsetToCurrentFrame
       // 
-      this.setAlfano6OffsetToCurrentFrame.Location = new System.Drawing.Point(258, 228);
+      this.setAlfano6OffsetToCurrentFrame.Location = new System.Drawing.Point(258, 200);
       this.setAlfano6OffsetToCurrentFrame.Name = "setAlfano6OffsetToCurrentFrame";
       this.setAlfano6OffsetToCurrentFrame.Size = new System.Drawing.Size(258, 23);
       this.setAlfano6OffsetToCurrentFrame.TabIndex = 19;
@@ -242,11 +245,37 @@ namespace gokart_vanal
       this.setAlfano6OffsetToCurrentFrame.UseVisualStyleBackColor = true;
       this.setAlfano6OffsetToCurrentFrame.Click += new System.EventHandler(this.setAlfano6OffsetToCurrentFrame_Click);
       // 
+      // detachVideo
+      // 
+      this.detachVideo.AutoSize = true;
+      this.detachVideo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.detachVideo.Image = ((System.Drawing.Image)(resources.GetObject("detachVideo.Image")));
+      this.detachVideo.Location = new System.Drawing.Point(550, 17);
+      this.detachVideo.Name = "detachVideo";
+      this.detachVideo.Size = new System.Drawing.Size(22, 22);
+      this.detachVideo.TabIndex = 20;
+      this.detachVideo.UseVisualStyleBackColor = true;
+      this.detachVideo.Click += new System.EventHandler(this.detachVideo_Click);
+      // 
+      // detachAlfano6
+      // 
+      this.detachAlfano6.AutoSize = true;
+      this.detachAlfano6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.detachAlfano6.Image = ((System.Drawing.Image)(resources.GetObject("detachAlfano6.Image")));
+      this.detachAlfano6.Location = new System.Drawing.Point(550, 171);
+      this.detachAlfano6.Name = "detachAlfano6";
+      this.detachAlfano6.Size = new System.Drawing.Size(22, 22);
+      this.detachAlfano6.TabIndex = 21;
+      this.detachAlfano6.UseVisualStyleBackColor = true;
+      this.detachAlfano6.Click += new System.EventHandler(this.detachAlfano6_Click);
+      // 
       // DeckEditForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(584, 281);
+      this.ClientSize = new System.Drawing.Size(584, 254);
+      this.Controls.Add(this.detachAlfano6);
+      this.Controls.Add(this.detachVideo);
       this.Controls.Add(this.setAlfano6OffsetToCurrentFrame);
       this.Controls.Add(this.label10);
       this.Controls.Add(this.alfano6Offset);
@@ -272,7 +301,7 @@ namespace gokart_vanal
       this.Name = "DeckEditForm";
       this.ShowIcon = false;
       this.ShowInTaskbar = false;
-      this.Text = "動画の調整";
+      this.Text = "動画デッキの設定";
       this.TopMost = true;
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DeckEditForm_FormClosed);
       this.ResumeLayout(false);
@@ -301,5 +330,7 @@ namespace gokart_vanal
     private System.Windows.Forms.Label label10;
     private System.Windows.Forms.TextBox alfano6Offset;
     private System.Windows.Forms.Button setAlfano6OffsetToCurrentFrame;
+    private System.Windows.Forms.Button detachVideo;
+    private System.Windows.Forms.Button detachAlfano6;
   }
 }

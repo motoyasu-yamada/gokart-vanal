@@ -310,7 +310,8 @@ namespace gokart_vanal
       Program.UserSettings.Save();
 
       drag = Drag.None;
-      Console.WriteLine($"DragDrop {drag} -> {filePath}");
+      UpdateControlAbilities();
+
       pictureBoxVideo.Invalidate();
     }
 
@@ -413,7 +414,7 @@ namespace gokart_vanal
 
       if (playingDeck.B.VideoCapture != null)
       {
-        this.hScrollBarB.Maximum = playingDeck.A.VideoCapture.FrameCount;
+        this.hScrollBarB.Maximum = playingDeck.B.VideoCapture.FrameCount;
         this.hScrollBarB.Enabled = true;
         this.currentFramePosB.Enabled = true;
       }
