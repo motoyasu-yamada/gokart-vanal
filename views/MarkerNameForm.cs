@@ -5,7 +5,8 @@ namespace gokart_vanal
 {
   public partial class MarkerNameModal : Form
   {
-    public string value { get; private set; }
+    public string MarkerName { get; private set; }
+    public bool CreateOtherMaker { get; private set; }
 
     public MarkerNameModal()
     {
@@ -14,7 +15,8 @@ namespace gokart_vanal
 
     private void create_Click(object sender, EventArgs e)
     {
-      this.value = markerName.Text;
+      this.MarkerName = markerName.Text;
+      this.CreateOtherMaker = createOtherMarker.Checked;
     }
   }
 }

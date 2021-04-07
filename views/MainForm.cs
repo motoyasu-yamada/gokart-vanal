@@ -1,7 +1,6 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -428,16 +427,31 @@ namespace gokart_vanal
       PaintDeck(e.Graphics, drag == Drag.OnB, B, rectB);
     }
 
+    private void CreateMakerWithName(Deck deck, string name)
+    {
+      var c = deck.Components;
+      var frame = deck.PlayingDeckItem.CurrentFramePos;
+      c.MarkerBindingSource.Add(new Marker { Name = name, Frame = frame });
+      c.Markers.SelectedIndex = c.Markers.Items.Count - 1;
+    }
 
     private void CreateMarker(Deck deck)
     {
-      var c = deck.Components;
       var m = new MarkerNameModal();
       var dr = m.ShowDialog();
       if (dr == DialogResult.OK)
       {
-        c.MarkerBindingSource.Add(new Marker { Name = m.value, Frame = deck.PlayingDeckItem.CurrentFramePos });
-        c.Markers.SelectedIndex = c.Markers.Items.Count - 1;
+        var name = Name = m.MarkerName;
+        if (m.CreateOtherMaker)
+        {
+          CreateMakerWithName(A, name);
+          CreateMakerWithName(B, name);
+        }
+        else
+        {
+          CreateMakerWithName(deck, name);
+        }
+
         UpdateControlAbilities();
         Program.UserSettings.Save();
       }
@@ -585,6 +599,5 @@ namespace gokart_vanal
     {
       JumpToLap(B);
     }
-
   }
 }

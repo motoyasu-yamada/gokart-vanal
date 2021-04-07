@@ -83,9 +83,9 @@ namespace gokart_vanal
       // 
       this.hScrollBarA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.hScrollBarA.LargeChange = 1;
+      this.hScrollBarA.LargeChange = 6;
       this.hScrollBarA.Location = new System.Drawing.Point(20, 25);
-      this.hScrollBarA.Maximum = 0;
+      this.hScrollBarA.Maximum = 6;
       this.hScrollBarA.Name = "hScrollBarA";
       this.hScrollBarA.Size = new System.Drawing.Size(980, 20);
       this.hScrollBarA.TabIndex = 18;
@@ -95,7 +95,9 @@ namespace gokart_vanal
       // 
       this.hScrollBarB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.hScrollBarB.LargeChange = 6;
       this.hScrollBarB.Location = new System.Drawing.Point(20, 445);
+      this.hScrollBarB.Maximum = 6;
       this.hScrollBarB.Name = "hScrollBarB";
       this.hScrollBarB.Size = new System.Drawing.Size(980, 20);
       this.hScrollBarB.TabIndex = 20;
@@ -286,6 +288,7 @@ namespace gokart_vanal
       this.markersB.Name = "markersB";
       this.markersB.Size = new System.Drawing.Size(100, 25);
       this.markersB.ToolTipText = "B画面のマーカー一覧";
+      this.markersB.SelectedIndexChanged += new System.EventHandler(this.markersB_SelectedIndexChanged);
       // 
       // createMarkerB
       // 
