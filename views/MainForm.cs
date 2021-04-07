@@ -25,16 +25,17 @@ namespace gokart_vanal
     {
       InitializeComponent();
       pictureBoxVideo.AllowDrop = true;
-
-      InitializeDeckComponent(A);
-      InitializeDeckComponent(B);
-
       foreach (var i in MoveMenu)
       {
         moveMenu.DropDownItems.Add(i.Display);
       }
-      ReloadVideoAndAlfano6();
+      InitializeDeckComponent(A);
+      InitializeDeckComponent(B);
 
+      ResetDeck(A);
+      ResetDeck(B);
+
+      RefreshVideo();
       UpdateControlAbilities();
     }
 
@@ -138,25 +139,34 @@ namespace gokart_vanal
       }
     }
 
-    private void SetVideo(Deck deck, string videoPath)
+    private void ResetDeck(Deck deck)
     {
-      deck.DeckItem.VideoPath = videoPath;
-      if (videoPath != null)
+      if (deck.DeckItem.VideoPath != null)
       {
-        deck.PlayingDeckItem.VideoCapture = new VideoCapture(videoPath);
+        deck.PlayingDeckItem.VideoCapture = new VideoCapture(deck.DeckItem.VideoPath);
       }
-      deck.PlayingDeckItem.CurrentFramePos = 0;
-      deck.Components.MarkerBindingSource.ResetBindings(false);
-      UpdateControlAbilities();
-    }
 
-    private void SetAlfano6(Deck deck, string filePath)
-    {
-      deck.PlayingDeckItem.Session = new alfano6.Reader().Read(filePath);
+      deck.Components.MarkerBindingSource.ResetBindings(false);
+
+      deck.PlayingDeckItem.Session = null;
+      if (deck.DeckItem.Alfano6Path != null)
+      {
+        deck.PlayingDeckItem.Session = new alfano6.Reader().Read(deck.DeckItem.Alfano6Path);
+      }
+
       var sessionIsValid = deck.PlayingDeckItem.Session != null;
       if (sessionIsValid)
       {
-        deck.DeckItem.Alfano6Path = filePath;
+        deck.PlayingDeckItem.CurrentFramePos = deck.DeckItem.Alfano6Offset;
+      }
+      else
+      {
+        deck.DeckItem.Alfano6Path = null;
+        deck.PlayingDeckItem.CurrentFramePos = 0;
+      }
+
+      if (sessionIsValid)
+      {
         deck.Components.JumpToLap.Items.Clear();
         foreach (var l in deck.PlayingDeckItem.Session.Laps)
         {
@@ -167,19 +177,6 @@ namespace gokart_vanal
       {
         deck.Components.JumpToLap.Items.Clear();
       }
-      UpdateControlAbilities();
-    }
-
-
-    private void ReloadVideoAndAlfano6()
-    {
-      SetVideo(A, Program.UserSettings.Deck.A.VideoPath);
-      SetVideo(B, Program.UserSettings.Deck.B.VideoPath);
-
-      SetAlfano6(A, Program.UserSettings.Deck.A.Alfano6Path);
-      SetAlfano6(B, Program.UserSettings.Deck.B.Alfano6Path);
-
-      RefreshVideo();
     }
 
     public void RefreshVideo()
@@ -488,6 +485,21 @@ namespace gokart_vanal
       SelectMarker(B);
     }
 
+    private void ProcessDragDrop(Deck deck, string filePath)
+    {
+      if (FileTypeDetector.Detect(filePath) == FileType.Video)
+      {
+        Program.UserSettings.RestoreFromHistory(deck.DeckItem, filePath);
+      }
+      else
+      {
+        deck.DeckItem.Alfano6Path = filePath;
+        deck.DeckItem.Alfano6Offset = 0;
+      }
+      ResetDeck(deck);
+      Program.UserSettings.Save();
+    }
+
     private void pictureBoxVideo_DragDrop(object sender, DragEventArgs e)
     {
       string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
@@ -495,34 +507,16 @@ namespace gokart_vanal
       switch (OnAOrB(e))
       {
         case Drag.OnA:
-          if (FileTypeDetector.Detect(filePath) == FileType.Video)
-          {
-            SetVideo(A, filePath);
-
-          }
-          else
-          {
-            SetAlfano6(A, filePath);
-          }
+          ProcessDragDrop(A, filePath);
           break;
         case Drag.OnB:
-          if (FileTypeDetector.Detect(filePath) == FileType.Video)
-          {
-            SetVideo(B, filePath);
-
-          }
-          else
-          {
-            SetAlfano6(B, filePath);
-          }
+          ProcessDragDrop(B, filePath);
           break;
       }
-      Program.UserSettings.Save();
 
       drag = Drag.None;
       UpdateControlAbilities();
-
-      pictureBoxVideo.Invalidate();
+      RefreshVideo();
     }
 
     private void pictureBoxVideo_DragEnter(object sender, DragEventArgs e)

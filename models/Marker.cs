@@ -17,5 +17,10 @@ namespace gokart_vanal
         return $"{Name} ({Frame})";
       }
     }
+
+    public Marker Clone()
+    {
+      return new Marker { Name = this.Name, Frame = this.Frame };
+    }
   }
 }

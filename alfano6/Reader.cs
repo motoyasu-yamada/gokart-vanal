@@ -33,7 +33,6 @@ namespace gokart_vanal.alfano6
           {
             var lapNumber = uint.Parse(match.Groups[1].Value);
             var quantumns = ParseLapFile(csv);
-            Console.WriteLine($"**** lapNumber:{lapNumber},quantumns:{quantumns.Count()}");
             ql[lapNumber] = quantumns.ToArray();
             continue;
           }
@@ -47,11 +46,9 @@ namespace gokart_vanal.alfano6
           if (session.Laps.Length < lapNo)
           {
             // PIT IN
-            Console.WriteLine($"**** lapNumber:{lapNo}, PITIN");
             continue;
           }
           session.Laps[lapNo-1].Quantums = kv.Value.ToArray();
-          Console.WriteLine($"**** lapNumber:{lapNo},quantumns:{session.Laps[lapNo - 1].Quantums.Count()}");
         }
       }
       return session;
