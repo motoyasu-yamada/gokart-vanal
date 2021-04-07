@@ -5,18 +5,19 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace gokart_vanal
 {
   public partial class ExportForm : Form
   {
-    private PlayingDeck playingDeck;
+    private PlayingDeckItem A;
+    private PlayingDeckItem B;
 
-    public ExportForm(PlayingDeck playingDeck)
+    public ExportForm(PlayingDeckItem a, PlayingDeckItem b)
     {
-      this.playingDeck = playingDeck;
+      this.A = a;
+      this.B = b;
 
       InitializeComponent();
 
@@ -85,12 +86,12 @@ namespace gokart_vanal
     {
       var a = (ExportImageSettings)e.Argument;
       var framesOfInterval = a.ImageDecompositionIntervalMillis / 100 * 6;
-      var startFrameA = playingDeck.A.CurrentFramePos;
-      var startFrameB = playingDeck.B.CurrentFramePos;
+      var startFrameA = A.CurrentFramePos;
+      var startFrameB = B.CurrentFramePos;
       var matA = new Mat();
       var matB = new Mat();
-      var videoCaptureA = playingDeck.A.VideoCapture;
-      var videoCaptureB = playingDeck.B.VideoCapture;
+      var videoCaptureA = A.VideoCapture;
+      var videoCaptureB = B.VideoCapture;
       var bmp = new Bitmap(videoCaptureA.FrameWidth, videoCaptureA.FrameHeight, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
 

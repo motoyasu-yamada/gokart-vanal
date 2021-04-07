@@ -56,6 +56,7 @@ namespace gokart_vanal
     public int OffsetPercent { get; set; } = 15;
     public int ScalePercent { get; set; } = 50;
     public VideoScalingMethod VideoScalingMethod { get; set; } = VideoScalingMethod.FitToScreen;
+    public List<Marker> Markers { get; set; } = new List<Marker>();
   }
 
 
@@ -67,37 +68,12 @@ namespace gokart_vanal
     public DeckItem A { get; set; } = new DeckItem();
 
     public DeckItem B { get; set; } = new DeckItem();
-
-    public List<Marker> Markers { get; set; } = new List<Marker>();
   }
 
   [Serializable()]
   public class HistorySettings
   {
-    public ArrangeMode ArrangeMode { get; set; } = ArrangeMode.Vertical;
-    public List<VideoHistoryItem> VideoHistory { get; set; } = new List<VideoHistoryItem>();
-    public List<MakerHistoryItem> MakerHistoryItem { get; set; } = new List<MakerHistoryItem>();
-  }
-
-  [Serializable()]
-  public class MakerHistoryItem
-  {
-    public string GetKey()
-    {
-      return VideoPathA + "___" + VideoPathB;
-
-    }
-    public string VideoPathA { get; set; }
-    public string VideoPathB { get; set; }
-    public List<Marker> Markers { get; set; } = new List<Marker>();
-  }
-
-  [Serializable()]
-  public class VideoHistoryItem
-  {
-    public string VideoPath { get; set; }
-    public int VerticalOffset { get; set; }
-    public int HorizontalOffset { get; set; }
+    public List<DeckItem> Decks { get; set; } = new List<DeckItem>();
   }
 
 }

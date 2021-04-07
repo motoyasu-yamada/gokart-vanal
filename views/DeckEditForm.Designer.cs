@@ -51,6 +51,11 @@ namespace gokart_vanal
       this.setAlfano6OffsetToCurrentFrame = new System.Windows.Forms.Button();
       this.detachVideo = new System.Windows.Forms.Button();
       this.detachAlfano6 = new System.Windows.Forms.Button();
+      this.markers = new System.Windows.Forms.ListBox();
+      this.deleteMarker = new System.Windows.Forms.Button();
+      this.upMarker = new System.Windows.Forms.Button();
+      this.downMarker = new System.Windows.Forms.Button();
+      this.label11 = new System.Windows.Forms.Label();
       this.SuspendLayout();
       // 
       // label1
@@ -269,11 +274,71 @@ namespace gokart_vanal
       this.detachAlfano6.UseVisualStyleBackColor = true;
       this.detachAlfano6.Click += new System.EventHandler(this.detachAlfano6_Click);
       // 
+      // markers
+      // 
+      this.markers.FormattingEnabled = true;
+      this.markers.ItemHeight = 12;
+      this.markers.Location = new System.Drawing.Point(22, 263);
+      this.markers.Name = "markers";
+      this.markers.Size = new System.Drawing.Size(550, 268);
+      this.markers.TabIndex = 22;
+      this.markers.SelectedIndexChanged += new System.EventHandler(this.markers_SelectedIndexChanged);
+      // 
+      // deleteMarker
+      // 
+      this.deleteMarker.AutoSize = true;
+      this.deleteMarker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.deleteMarker.Image = ((System.Drawing.Image)(resources.GetObject("deleteMarker.Image")));
+      this.deleteMarker.Location = new System.Drawing.Point(550, 235);
+      this.deleteMarker.Name = "deleteMarker";
+      this.deleteMarker.Size = new System.Drawing.Size(22, 22);
+      this.deleteMarker.TabIndex = 23;
+      this.deleteMarker.UseVisualStyleBackColor = true;
+      this.deleteMarker.Click += new System.EventHandler(this.deleteMarker_Click);
+      // 
+      // upMarker
+      // 
+      this.upMarker.AutoSize = true;
+      this.upMarker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.upMarker.Image = ((System.Drawing.Image)(resources.GetObject("upMarker.Image")));
+      this.upMarker.Location = new System.Drawing.Point(522, 235);
+      this.upMarker.Name = "upMarker";
+      this.upMarker.Size = new System.Drawing.Size(22, 22);
+      this.upMarker.TabIndex = 24;
+      this.upMarker.UseVisualStyleBackColor = true;
+      this.upMarker.Click += new System.EventHandler(this.upMarker_Click);
+      // 
+      // downMarker
+      // 
+      this.downMarker.AutoSize = true;
+      this.downMarker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+      this.downMarker.Image = ((System.Drawing.Image)(resources.GetObject("downMarker.Image")));
+      this.downMarker.Location = new System.Drawing.Point(494, 235);
+      this.downMarker.Name = "downMarker";
+      this.downMarker.Size = new System.Drawing.Size(22, 22);
+      this.downMarker.TabIndex = 25;
+      this.downMarker.UseVisualStyleBackColor = true;
+      this.downMarker.Click += new System.EventHandler(this.downMarker_Click);
+      // 
+      // label11
+      // 
+      this.label11.AutoSize = true;
+      this.label11.Location = new System.Drawing.Point(25, 240);
+      this.label11.Name = "label11";
+      this.label11.Size = new System.Drawing.Size(62, 12);
+      this.label11.TabIndex = 26;
+      this.label11.Text = "マーカー(&M):";
+      // 
       // DeckEditForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(584, 254);
+      this.ClientSize = new System.Drawing.Size(593, 550);
+      this.Controls.Add(this.label11);
+      this.Controls.Add(this.downMarker);
+      this.Controls.Add(this.upMarker);
+      this.Controls.Add(this.deleteMarker);
+      this.Controls.Add(this.markers);
       this.Controls.Add(this.detachAlfano6);
       this.Controls.Add(this.detachVideo);
       this.Controls.Add(this.setAlfano6OffsetToCurrentFrame);
@@ -332,5 +397,10 @@ namespace gokart_vanal
     private System.Windows.Forms.Button setAlfano6OffsetToCurrentFrame;
     private System.Windows.Forms.Button detachVideo;
     private System.Windows.Forms.Button detachAlfano6;
+    private System.Windows.Forms.ListBox markers;
+    private System.Windows.Forms.Button deleteMarker;
+    private System.Windows.Forms.Button upMarker;
+    private System.Windows.Forms.Button downMarker;
+    private System.Windows.Forms.Label label11;
   }
 }

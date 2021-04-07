@@ -14,6 +14,21 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +48,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>GOKART-ICO.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>gokart_vanal.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -55,48 +76,49 @@
     <Compile Include="alfano6\CsvParser.cs" />
     <Compile Include="alfano6\Lap.cs" />
     <Compile Include="alfano6\Session.cs" />
-    <Compile Include="ArrangeMode.cs" />
-    <Compile Include="ExportForm.cs">
+    <Compile Include="models\ArrangeMode.cs" />
+    <Compile Include="models\PlayingDeckItem.cs" />
+    <Compile Include="models\Deck.cs" />
+    <Compile Include="views\ExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExportForm.Designer.cs">
+    <Compile Include="views\ExportForm.Designer.cs">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DeckEditForm.cs">
+    <Compile Include="views\DeckEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DeckEditForm.Designer.cs">
+    <Compile Include="views\DeckEditForm.Designer.cs">
       <DependentUpon>DeckEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileTypeDetector.cs" />
-    <Compile Include="Marker.cs" />
-    <Compile Include="MarkerNameModal.cs">
+    <Compile Include="models\FileTypeDetector.cs" />
+    <Compile Include="models\Marker.cs" />
+    <Compile Include="views\MarkerNameForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MarkerNameModal.Designer.cs">
-      <DependentUpon>MarkerNameModal.cs</DependentUpon>
+    <Compile Include="views\MarkerNameForm.Designer.cs">
+      <DependentUpon>MarkerNameForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlayDeck.cs" />
-    <Compile Include="PlayerWindow.cs">
+    <Compile Include="views\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlayerWindow.Designer.cs">
-      <DependentUpon>PlayerWindow.cs</DependentUpon>
+    <Compile Include="views\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserSettings.cs" />
-    <EmbeddedResource Include="ExportForm.resx">
+    <Compile Include="models\UserSettings.cs" />
+    <EmbeddedResource Include="views\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DeckEditForm.resx">
+    <EmbeddedResource Include="views\DeckEditForm.resx">
       <DependentUpon>DeckEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MarkerNameModal.resx">
-      <DependentUpon>MarkerNameModal.cs</DependentUpon>
+    <EmbeddedResource Include="views\MarkerNameForm.resx">
+      <DependentUpon>MarkerNameForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlayerWindow.resx">
-      <DependentUpon>PlayerWindow.cs</DependentUpon>
+    <EmbeddedResource Include="views\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -107,7 +129,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="Properties\DataSources\PlayData.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -135,6 +156,26 @@
     <PackageReference Include="System.IO.Compression">
       <Version>4.3.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="GOKART-ICO.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 および x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

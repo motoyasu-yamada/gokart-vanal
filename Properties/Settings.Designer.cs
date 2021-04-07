@@ -22,17 +22,5 @@ namespace gokart_vanal.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public string FramePositionA {
-            get {
-                return ((string)(this["FramePositionA"]));
-            }
-            set {
-                this["FramePositionA"] = value;
-            }
-        }
     }
 }

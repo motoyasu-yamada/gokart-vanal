@@ -42,22 +42,4 @@ namespace gokart_vanal
       }
     }
   }
-
-  public class PlayingDeck
-  {
-    public PlayingDeckItem A { get; } = new PlayingDeckItem();
-    public PlayingDeckItem B { get; } = new PlayingDeckItem();
-
-    public void Move(int offset)
-    {
-      A.CurrentFramePos += offset;
-      B.CurrentFramePos += offset;
-    }
-
-    public void SetCurrentFrame(int[] frame)
-    {
-      A.CurrentFramePos = frame[0];
-      B.CurrentFramePos = frame[1];
-    }
-  }
 }

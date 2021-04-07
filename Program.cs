@@ -15,7 +15,7 @@ namespace gokart_vanal
     {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new PlayerWindow());
+      Application.Run(new MainForm());
     }
   }
 }
