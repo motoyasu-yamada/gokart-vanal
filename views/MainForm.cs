@@ -1,6 +1,7 @@
 ﻿using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -29,11 +30,17 @@ namespace gokart_vanal
       InitializeDeckComponent(A);
       InitializeDeckComponent(B);
 
+      foreach (var i in MoveMenu)
+      {
+        moveMenu.DropDownItems.Add(i.Display);
+      }
       ReloadVideoAndAlfano6();
+
+      UpdateControlAbilities();
     }
 
     private static T GetToolStripItem<T>(DeckType deckType, T toolStripItemA) where T : ToolStripItem
-{
+    {
       Debug.Assert(toolStripItemA.Name.EndsWith("A"));
       if (deckType == DeckType.A)
       {
@@ -72,6 +79,12 @@ namespace gokart_vanal
       deck.Components.VideoFrameBar = GetControl(deckType, hScrollBarA);
       deck.Components.VideoFrameBar.DataBindings.Add(nameof(HScrollBar.Value), deck.PlayingDeckItem, nameof(PlayingDeckItem.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
 
+      deck.Components.MoveMenuButton = GetControl(deckType, moveMenuButtonA);
+      deck.Components.MoveMenu = deckType == DeckType.A ? moveMenuA : moveMenuB;
+      foreach (var i in MoveMenu)
+      {
+        deck.Components.MoveMenu.Items.Add(i.Display);
+      }
     }
 
     private void UpdateControlAbilities(Deck deck)
@@ -87,6 +100,7 @@ namespace gokart_vanal
         c.CurrentFramePos.Enabled = true;
         c.VideoFrameBar.Maximum = playingDeckItem.VideoCapture.FrameCount;
         c.VideoFrameBar.Enabled = true;
+        c.MoveMenu.Enabled = true;
       }
       else
       {
@@ -97,6 +111,7 @@ namespace gokart_vanal
         c.CurrentFramePos.Enabled = false;
         c.VideoFrameBar.Maximum = 0;
         c.VideoFrameBar.Enabled = false;
+        c.MoveMenu.Enabled = false;
       }
     }
 
@@ -104,6 +119,24 @@ namespace gokart_vanal
     {
       UpdateControlAbilities(A);
       UpdateControlAbilities(B);
+      if (A.PlayingDeckItem.VideoCapture != null && B.PlayingDeckItem.VideoCapture != null)
+      {
+        moveMenu.Enabled = true;
+        moveNext1Frame.Enabled = true;
+        moveNext100ms.Enabled = true;
+        movePrev1Frame.Enabled = true;
+        movePrev100ms.Enabled = true;
+        export.Enabled = true;
+      }
+      else
+      {
+        moveMenu.Enabled = false;
+        moveNext1Frame.Enabled = false;
+        moveNext100ms.Enabled = false;
+        movePrev1Frame.Enabled = false;
+        movePrev100ms.Enabled = false;
+        export.Enabled = false;
+      }
     }
 
     private void SetVideo(Deck deck, string videoPath)
@@ -179,32 +212,136 @@ namespace gokart_vanal
     {
       RefreshVideo();
     }
-
-    private void MoveFrame(int offset)
+    public class MoveMenuItem
     {
-      A.PlayingDeckItem.CurrentFramePos += offset;
-      B.PlayingDeckItem.CurrentFramePos += offset;
+      public string Display { get; set; }
+      public int OffsetSecond { get; set; }
+    }
+
+    public MoveMenuItem[] MoveMenu { get; private set; } = new MoveMenuItem[] {
+
+      new MoveMenuItem { Display = "3秒進む", OffsetSecond = 3 },
+      new MoveMenuItem { Display = "10秒進む", OffsetSecond = 10 },
+      new MoveMenuItem { Display = "30秒進む", OffsetSecond = 30 },
+      new MoveMenuItem { Display = "60秒進む", OffsetSecond = 60 },
+      new MoveMenuItem { Display = "180秒進む", OffsetSecond = 180 },
+      new MoveMenuItem { Display = "-", OffsetSecond = 0 },
+      new MoveMenuItem { Display = "3秒戻る", OffsetSecond = -3 },
+      new MoveMenuItem { Display = "10秒戻る", OffsetSecond = -10 },
+      new MoveMenuItem { Display = "30秒戻る", OffsetSecond = -30 },
+    };
+
+    private void SelectMoveMenu(Deck deck, ToolStripItemClickedEventArgs e)
+    {
+      var i = deck.Components.MoveMenu.Items.IndexOf(e.ClickedItem);
+      if (i == -1 || deck.PlayingDeckItem.VideoCapture == null)
+      {
+        return;
+      }
+      int offset = MoveMenu[i].OffsetSecond;
+      int newPos = deck.PlayingDeckItem.CurrentFramePos + (int)deck.PlayingDeckItem.VideoCapture.Fps * offset;
+      if (newPos < 0)
+      {
+        newPos = 0;
+      }
+      if (deck.PlayingDeckItem.VideoCapture.FrameCount <= newPos)
+      {
+        newPos = deck.PlayingDeckItem.VideoCapture.FrameCount - 1;
+      }
+      deck.PlayingDeckItem.CurrentFramePos = newPos;
+    }
+
+    private void moveMenuA_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+    {
+      SelectMoveMenu(A, e);
+    }
+
+    private void moveMenuButtonA_Click(object sender, EventArgs e)
+    {
+      moveMenuA.Show(moveMenuButtonA, 0, 0);
+    }
+
+    private void moveMenuButtonB_Click(object sender, EventArgs e)
+    {
+      moveMenuB.Show(moveMenuButtonB, 0, 0);
+    }
+
+    private void moveMenuB_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+    {
+      SelectMoveMenu(B, e);
+    }
+    private void moveMenu_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+    {
+      var i = moveMenu.DropDownItems.IndexOf(e.ClickedItem);
+      if (i == -1 || A.PlayingDeckItem.VideoCapture == null)
+      {
+        return;
+      }
+      int offset = MoveMenu[i].OffsetSecond;
+      MoveABMillis(offset * 1000);
+    }
+
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+      switch (keyData)
+      {
+        case Keys.Up:
+          MoveABFrames(6);
+          return true;
+        case Keys.Down:
+          MoveABFrames(-6);
+          return true;
+        case Keys.Right:
+          MoveABFrames(1);
+          return true;
+        case Keys.Left:
+          MoveABFrames(-1);
+          return true;
+      }
+      return base.ProcessCmdKey(ref msg, keyData);
+    }
+
+    private void MoveABFrames(int offset)
+    {
+      int offsetA2B = B.PlayingDeckItem.CurrentFramePos - A.PlayingDeckItem.CurrentFramePos;
+      int newFramePos = A.PlayingDeckItem.CurrentFramePos + offset;
+      if (newFramePos < 0)
+      {
+        newFramePos = 0;
+      }
+      if (A.PlayingDeckItem.VideoCapture.FrameCount - 1 < newFramePos)
+      {
+        newFramePos = A.PlayingDeckItem.VideoCapture.FrameCount;
+      }
+      A.PlayingDeckItem.CurrentFramePos = newFramePos;
+      B.PlayingDeckItem.CurrentFramePos = newFramePos + offsetA2B;
       RefreshVideo();
     }
 
-    private void next1frame_Click(object sender, EventArgs e)
+    private void MoveABMillis(int offsetMillis)
     {
-      MoveFrame(1);
+      int offsetFrames = (int)Math.Round(A.PlayingDeckItem.VideoCapture.Fps * offsetMillis / 1000, MidpointRounding.AwayFromZero);
+      MoveABFrames(offsetFrames);
     }
 
-    private void next6frames_Click(object sender, EventArgs e)
+    private void moveNext1Frame_Click(object sender, EventArgs e)
     {
-      MoveFrame(6);
+      MoveABFrames(1);
     }
 
-    private void prev1frame_Click(object sender, EventArgs e)
+    private void moveNext100ms_Click(object sender, EventArgs e)
     {
-      MoveFrame(-1);
+      MoveABMillis(100);
     }
 
-    private void prev6frames_Click(object sender, EventArgs e)
+    private void movePrev1Frame_Click(object sender, EventArgs e)
     {
-      MoveFrame(-6);
+      MoveABFrames(-1);
+    }
+
+    private void movePrev100ms_Click(object sender, EventArgs e)
+    {
+      MoveABMillis(-100);
     }
 
     private void export_Click(object sender, EventArgs e)
@@ -291,25 +428,6 @@ namespace gokart_vanal
       PaintDeck(e.Graphics, drag == Drag.OnB, B, rectB);
     }
 
-    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-    {
-      switch (keyData)
-      {
-        case Keys.Up:
-          MoveFrame(6);
-          return true;
-        case Keys.Down:
-          MoveFrame(-6);
-          return true;
-        case Keys.Right:
-          MoveFrame(1);
-          return true;
-        case Keys.Left:
-          MoveFrame(-1);
-          return true;
-      }
-      return base.ProcessCmdKey(ref msg, keyData);
-    }
 
     private void CreateMarker(Deck deck)
     {

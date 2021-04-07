@@ -26,5 +26,7 @@ namespace gokart_vanal
     public ToolStripButton CreateMarker { get; set; }
     public ToolStripTextBox CurrentFramePos { get; set; }
     public HScrollBar VideoFrameBar { get; set; }
+    public ContextMenuStrip MoveMenu { get; set; }
+    public Button MoveMenuButton { get; set; }
   }
 }
