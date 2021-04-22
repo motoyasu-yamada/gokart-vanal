@@ -21,7 +21,7 @@ namespace gokart_vanal
 
       InitializeComponent();
 
-      var s = Program.UserSettings;
+      var s = Program.UserSettings.Options;
       Select(imageDecompositionIntervalMillis, s.Export.ImageDecompositionIntervalMillis);
       Select(lengthMillis, s.Export.LengthMillis);
       folder.Text = s.Export.Folder;
@@ -45,12 +45,12 @@ namespace gokart_vanal
 
     private void Save()
     {
-      var s = Program.UserSettings;
-      s.Export.ImageDecompositionIntervalMillis = int.Parse((string)imageDecompositionIntervalMillis.SelectedItem);
-      s.Export.LengthMillis = int.Parse((string)lengthMillis.SelectedItem);
-      s.Export.Folder = folder.Text;
-      s.Export.FileNameTemplate = fileNameTemplate.Text;
-      s.Save();
+      var o = Program.UserSettings.Options;
+      o.Export.ImageDecompositionIntervalMillis = int.Parse((string)imageDecompositionIntervalMillis.SelectedItem);
+      o.Export.LengthMillis = int.Parse((string)lengthMillis.SelectedItem);
+      o.Export.Folder = folder.Text;
+      o.Export.FileNameTemplate = fileNameTemplate.Text;
+      Program.UserSettings.Save();
     }
 
     private void chooseFolder_Click(object sender, EventArgs e)

@@ -13053,15 +13053,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:GoKART! VANAL"
-        "ProductCode" = "8:{835B1E06-F57E-4789-AD54-00004EAF01B9}"
-        "PackageCode" = "8:{2A8DBA45-8695-4F0F-B413-61CC1056059B}"
+        "ProductCode" = "8:{E9D94B41-495C-4C1B-8541-08BF0ECDDE14}"
+        "PackageCode" = "8:{1DD3A043-66E0-4A48-8EEE-C8FA812C4A93}"
         "UpgradeCode" = "8:{93606672-3236-473C-B042-7F5B9311B430}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:Spicysoft Corporation"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -13575,7 +13575,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A752B6E455164B7B85FD906E60FDAE9D"
             {
-            "SourcePath" = "8:..\\obj\\Release\\gokart-vanal.exe"
+            "SourcePath" = "8:..\\obj\\Debug\\gokart-vanal.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B284F199BC234CE9A426F53D3CE129BF"

@@ -77,8 +77,15 @@
     <Compile Include="alfano6\Lap.cs" />
     <Compile Include="alfano6\Session.cs" />
     <Compile Include="models\ArrangeMode.cs" />
+    <Compile Include="models\DeckItem.cs" />
+    <Compile Include="models\DeckOptions.cs" />
+    <Compile Include="models\ExportOptions.cs" />
+    <Compile Include="models\GridType.cs" />
+    <Compile Include="models\HistorySettings.cs" />
+    <Compile Include="models\Options.cs" />
     <Compile Include="models\PlayingDeckItem.cs" />
     <Compile Include="models\Deck.cs" />
+    <Compile Include="models\VideoScalingMethod.cs" />
     <Compile Include="views\ExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +115,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="models\UserSettings.cs" />
+    <Compile Include="views\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="views\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -128,7 +141,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="views\OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -176,6 +193,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OptionsDropdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ResultToCSV_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OptionsDropdown1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

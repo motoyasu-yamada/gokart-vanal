@@ -1,4 +1,6 @@
-﻿using OpenCvSharp;
+﻿using gokart_vanal.models;
+using gokart_vanal.views;
+using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
 using System.Diagnostics;
@@ -362,7 +364,7 @@ namespace gokart_vanal
       return new RectangleF(left, top, width, height);
     }
 
-    private void PaintDeck(Graphics g, bool dragging, Deck deck, RectangleF dst)
+    private void PaintDeck(Graphics g, bool dragging, Deck deck, RectangleF dst, Options options)
     {
       if (dragging)
       {
@@ -411,6 +413,23 @@ namespace gokart_vanal
           }
           g.DrawString(detail, fontDetail, textBrash, dst.Left + 10, dst.Top + 10);
         }
+        if (options.GridType != GridType.None)
+        {
+          using (var pen = new Pen(Color.FromArgb(100, 255, 255, 255)))
+          {
+            var (splitX,splitY) = options.GridType.NumberOfGrids();
+            for (int i = 0; i <= splitX; i++)
+            {
+              float x = dst.Left + dst.Width * i / splitX;
+              g.DrawLine(pen, x, dst.Top, x, dst.Bottom);
+            }
+            for (int i = 0; i <= splitY; i++)
+            {
+              float y = dst.Top + dst.Height * i / splitY;
+              g.DrawLine(pen, dst.Left, y, dst.Right, y);
+            }
+          }
+        }
       }
     }
 
@@ -420,8 +439,8 @@ namespace gokart_vanal
       var rectA = new RectangleF(0, 0, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
       var rectB = new RectangleF(0, pictureBoxVideo.Height / 2, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
 
-      PaintDeck(e.Graphics, drag == Drag.OnA, A, rectA);
-      PaintDeck(e.Graphics, drag == Drag.OnB, B, rectB);
+      PaintDeck(e.Graphics, drag == Drag.OnA, A, rectA, Program.UserSettings.Options);
+      PaintDeck(e.Graphics, drag == Drag.OnB, B, rectB, Program.UserSettings.Options);
     }
 
     private void CreateMakerWithName(Deck deck, string name)
@@ -592,6 +611,14 @@ namespace gokart_vanal
     private void jumpToLapB_SelectedIndexChanged(object sender, EventArgs e)
     {
       JumpToLap(B);
+    }
+
+    private void options_Click(object sender, EventArgs e)
+    {
+      var f = new OptionsForm(this, Program.UserSettings.Options);
+      f.ShowDialog();
+      Program.UserSettings.Save();
+      UpdateControlAbilities();
     }
   }
 }
