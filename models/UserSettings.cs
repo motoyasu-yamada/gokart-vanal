@@ -37,7 +37,10 @@ namespace gokart_vanal
     public override void Save()
     {
       AddHistory(Options.Deck.A);
-      AddHistory(Options.Deck.B);
+      if (Options.Deck.A.VideoPath != Options.Deck.B.VideoPath)
+      {
+        AddHistory(Options.Deck.B);
+      }
 
       base.Save();
     }
