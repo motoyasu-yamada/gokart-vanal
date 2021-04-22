@@ -179,6 +179,9 @@ namespace gokart_vanal
       {
         deck.Components.JumpToLap.Items.Clear();
       }
+
+      deck.Components.Markers.ComboBox.DataSource = 
+      deck.Components.MarkerBindingSource = new BindingSource(deck.DeckItem.Markers, "");
     }
 
     public void RefreshVideo()
