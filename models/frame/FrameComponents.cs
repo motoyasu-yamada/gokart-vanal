@@ -2,21 +2,7 @@
 
 namespace gokart_vanal
 {
-  public class Deck
-  {
-    public DeckType DeckType { get; set; }
-    public DeckItem DeckItem
-    {
-      get { return DeckType == DeckType.A ? Program.UserSettings.Options.Deck.A : Program.UserSettings.Options.Deck.B; }
-      set { if (DeckType == DeckType.A) { Program.UserSettings.Options.Deck.A = value; } else { Program.UserSettings.Options.Deck.B = value; } }
-    }
-    public PlayingDeckItem PlayingDeckItem { get; set; } = new PlayingDeckItem();
-    public DeckComponents Components { get; set; }
-  }
-
-  public enum DeckType { A, B };
-
-  public class DeckComponents
+  public class FrameComponents
   {
     public System.Drawing.Brush DragBrush { get; set; }
     public ToolStripButton Edit { get; set; }

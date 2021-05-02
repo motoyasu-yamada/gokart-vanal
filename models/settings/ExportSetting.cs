@@ -3,7 +3,7 @@
 namespace gokart_vanal
 {
   [Serializable()]
-  public class ExportOptions
+  public class ExportSetting
   {
     public string Folder { get; set; }
     public string FileNameTemplate { get; set; }

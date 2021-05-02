@@ -1,9 +1,12 @@
-﻿using OpenCvSharp;
+﻿using gokart_vanal.models;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace gokart_vanal
 {
-  public class PlayingDeckItem : INotifyPropertyChanged
+  public class FramePlaybackData : INotifyPropertyChanged
   {
     private VideoCapture videoCapture;
 

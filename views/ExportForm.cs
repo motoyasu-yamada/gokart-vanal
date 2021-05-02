@@ -11,17 +11,17 @@ namespace gokart_vanal
 {
   public partial class ExportForm : Form
   {
-    private PlayingDeckItem A;
-    private PlayingDeckItem B;
+    private FramePlaybackData A;
+    private FramePlaybackData B;
 
-    public ExportForm(PlayingDeckItem a, PlayingDeckItem b)
+    public ExportForm(FramePlaybackData a, FramePlaybackData b)
     {
       this.A = a;
       this.B = b;
 
       InitializeComponent();
 
-      var s = Program.UserSettings.Options;
+      var s = Program.UserSettings.MainSetting;
       Select(imageDecompositionIntervalMillis, s.Export.ImageDecompositionIntervalMillis);
       Select(lengthMillis, s.Export.LengthMillis);
       folder.Text = s.Export.Folder;
@@ -45,7 +45,7 @@ namespace gokart_vanal
 
     private void Save()
     {
-      var o = Program.UserSettings.Options;
+      var o = Program.UserSettings.MainSetting;
       o.Export.ImageDecompositionIntervalMillis = int.Parse((string)imageDecompositionIntervalMillis.SelectedItem);
       o.Export.LengthMillis = int.Parse((string)lengthMillis.SelectedItem);
       o.Export.Folder = folder.Text;

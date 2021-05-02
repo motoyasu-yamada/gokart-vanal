@@ -3,5 +3,5 @@
 namespace gokart_vanal
 {
   [Serializable()]
-  public enum ArrangeMode { Vertical, Horizontal }
+  public enum FrameLayout { Vertical, Horizontal }
 }

@@ -76,15 +76,17 @@
     <Compile Include="alfano6\CsvParser.cs" />
     <Compile Include="alfano6\Lap.cs" />
     <Compile Include="alfano6\Session.cs" />
-    <Compile Include="models\ArrangeMode.cs" />
-    <Compile Include="models\DeckItem.cs" />
-    <Compile Include="models\DeckOptions.cs" />
-    <Compile Include="models\ExportOptions.cs" />
+    <Compile Include="models\frame\FrameComponents.cs" />
+    <Compile Include="models\frame\FrameLayout.cs" />
+    <Compile Include="models\VideoData.cs" />
+    <Compile Include="models\settings\FrameSetting.cs" />
+    <Compile Include="models\settings\ExportSetting.cs" />
+    <Compile Include="models\frame\FrameId.cs" />
+    <Compile Include="models\frame\Frames.cs" />
     <Compile Include="models\GridType.cs" />
-    <Compile Include="models\HistorySettings.cs" />
-    <Compile Include="models\Options.cs" />
-    <Compile Include="models\PlayingDeckItem.cs" />
-    <Compile Include="models\Deck.cs" />
+    <Compile Include="models\settings\MainSettings.cs" />
+    <Compile Include="models\frame\FramePlaybackData.cs" />
+    <Compile Include="models\frame\Frame.cs" />
     <Compile Include="models\VideoScalingMethod.cs" />
     <Compile Include="views\ExportForm.cs">
       <SubType>Form</SubType>
@@ -114,7 +116,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="models\UserSettings.cs" />
+    <Compile Include="models\settings\UserSettings.cs" />
     <Compile Include="views\OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>

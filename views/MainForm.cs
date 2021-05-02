@@ -14,8 +14,8 @@ namespace gokart_vanal
     enum Drag { None, OnA, OnB }
 
 
-    private Deck A = new Deck { DeckType = DeckType.A, Components = new DeckComponents { DragBrush = new SolidBrush(Color.Red) } };
-    private Deck B = new Deck { DeckType = DeckType.B, Components = new DeckComponents { DragBrush = new SolidBrush(Color.Blue) } };
+    private Frame A = new Frame { Id = FrameId.A, Components = new FrameComponents { DragBrush = new SolidBrush(Color.Red) } };
+    private Frame B = new Frame { Id = FrameId.B, Components = new FrameComponents { DragBrush = new SolidBrush(Color.Blue) } };
 
     private SolidBrush noneBrush = new SolidBrush(Color.DarkGray);
     private SolidBrush nullBrash = new SolidBrush(Color.Black);
@@ -41,10 +41,10 @@ namespace gokart_vanal
       UpdateControlAbilities();
     }
 
-    private static T GetToolStripItem<T>(DeckType deckType, T toolStripItemA) where T : ToolStripItem
+    private static T GetToolStripItem<T>(FrameId deckType, T toolStripItemA) where T : ToolStripItem
     {
       Debug.Assert(toolStripItemA.Name.EndsWith("A"));
-      if (deckType == DeckType.A)
+      if (deckType == FrameId.A)
       {
         return toolStripItemA;
       }
@@ -52,10 +52,10 @@ namespace gokart_vanal
       return (T)toolStripItemA.GetCurrentParent().Items.Find(nameB, false)[0];
     }
 
-    private static T GetControl<T>(DeckType deckType, T controlA) where T : Control
+    private static T GetControl<T>(FrameId deckType, T controlA) where T : Control
     {
       Debug.Assert(controlA.Name.EndsWith("A"));
-      if (deckType == DeckType.A)
+      if (deckType == FrameId.A)
       {
         return controlA;
       }
@@ -63,36 +63,36 @@ namespace gokart_vanal
       return (T)controlA.Parent.Controls.Find(nameB, false)[0];
     }
 
-    private void InitializeDeckComponent(Deck deck)
+    private void InitializeDeckComponent(Frame deck)
     {
-      var deckType = deck.DeckType;
+      var deckType = deck.Id;
       deck.Components.Edit = GetToolStripItem(deckType, deckA);
       deck.Components.JumpToLap = GetToolStripItem(deckType, jumpToLapA);
 
       var markers = deck.Components.Markers = GetToolStripItem(deckType, markersA);
-      markers.ComboBox.DataSource = deck.Components.MarkerBindingSource = new BindingSource(deck.DeckItem.Markers, "");
+      markers.ComboBox.DataSource = deck.Components.MarkerBindingSource = new BindingSource(deck.VideoData.Markers, "");
       markers.ComboBox.DisplayMember = nameof(Marker.Display);
       markers.ComboBox.ValueMember = nameof(Marker.Display);
       deck.Components.CreateMarker = GetToolStripItem(deckType, createMarkerA);
 
       deck.Components.CurrentFramePos = GetToolStripItem(deckType, currentFramePosA);
-      deck.Components.CurrentFramePos.TextBox.DataBindings.Add(nameof(TextBox.Text), deck.PlayingDeckItem, nameof(PlayingDeckItem.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
+      deck.Components.CurrentFramePos.TextBox.DataBindings.Add(nameof(TextBox.Text), deck.PlaybackData, nameof(FramePlaybackData.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
 
       deck.Components.VideoFrameBar = GetControl(deckType, hScrollBarA);
-      deck.Components.VideoFrameBar.DataBindings.Add(nameof(HScrollBar.Value), deck.PlayingDeckItem, nameof(PlayingDeckItem.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
+      deck.Components.VideoFrameBar.DataBindings.Add(nameof(HScrollBar.Value), deck.PlaybackData, nameof(FramePlaybackData.CurrentFramePos), true, DataSourceUpdateMode.OnPropertyChanged);
 
       deck.Components.MoveMenuButton = GetControl(deckType, moveMenuButtonA);
-      deck.Components.MoveMenu = deckType == DeckType.A ? moveMenuA : moveMenuB;
+      deck.Components.MoveMenu = deckType == FrameId.A ? moveMenuA : moveMenuB;
       foreach (var i in MoveMenu)
       {
         deck.Components.MoveMenu.Items.Add(i.Display);
       }
     }
 
-    private void UpdateControlAbilities(Deck deck)
+    private void UpdateControlAbilities(Frame deck)
     {
       var c = deck.Components;
-      var playingDeckItem = deck.PlayingDeckItem;
+      var playingDeckItem = deck.PlaybackData;
       if (playingDeckItem.VideoCapture != null)
       {
         c.Edit.Enabled = true;
@@ -121,7 +121,7 @@ namespace gokart_vanal
     {
       UpdateControlAbilities(A);
       UpdateControlAbilities(B);
-      if (A.PlayingDeckItem.VideoCapture != null && B.PlayingDeckItem.VideoCapture != null)
+      if (A.PlaybackData.VideoCapture != null && B.PlaybackData.VideoCapture != null)
       {
         moveMenu.Enabled = true;
         moveNext1Frame.Enabled = true;
@@ -141,36 +141,36 @@ namespace gokart_vanal
       }
     }
 
-    private void ResetDeck(Deck deck)
+    private void ResetDeck(Frame deck)
     {
-      if (deck.DeckItem.VideoPath != null)
+      if (deck.VideoData.VideoPath != null)
       {
-        deck.PlayingDeckItem.VideoCapture = new VideoCapture(deck.DeckItem.VideoPath);
+        deck.PlaybackData.VideoCapture = new VideoCapture(deck.VideoData.VideoPath);
       }
 
       deck.Components.MarkerBindingSource.ResetBindings(false);
 
-      deck.PlayingDeckItem.Session = null;
-      if (deck.DeckItem.Alfano6Path != null)
+      deck.PlaybackData.Session = null;
+      if (deck.VideoData.Alfano6Path != null)
       {
-        deck.PlayingDeckItem.Session = new alfano6.Reader().Read(deck.DeckItem.Alfano6Path);
+        deck.PlaybackData.Session = new alfano6.Reader().Read(deck.VideoData.Alfano6Path);
       }
 
-      var sessionIsValid = deck.PlayingDeckItem.Session != null;
+      var sessionIsValid = deck.PlaybackData.Session != null;
       if (sessionIsValid)
       {
-        deck.PlayingDeckItem.CurrentFramePos = deck.DeckItem.Alfano6Offset;
+        deck.PlaybackData.CurrentFramePos = deck.VideoData.Alfano6Offset;
       }
       else
       {
-        deck.DeckItem.Alfano6Path = null;
-        deck.PlayingDeckItem.CurrentFramePos = 0;
+        deck.VideoData.Alfano6Path = null;
+        deck.PlaybackData.CurrentFramePos = 0;
       }
 
       if (sessionIsValid)
       {
         deck.Components.JumpToLap.Items.Clear();
-        foreach (var l in deck.PlayingDeckItem.Session.Laps)
+        foreach (var l in deck.PlaybackData.Session.Laps)
         {
           deck.Components.JumpToLap.Items.Add($"#{l.LapNumber} ({l.LapTime:000.00})");
         }
@@ -181,7 +181,7 @@ namespace gokart_vanal
       }
 
       deck.Components.Markers.ComboBox.DataSource = 
-      deck.Components.MarkerBindingSource = new BindingSource(deck.DeckItem.Markers, "");
+      deck.Components.MarkerBindingSource = new BindingSource(deck.VideoData.Markers, "");
     }
 
     public void RefreshVideo()
@@ -232,24 +232,24 @@ namespace gokart_vanal
       new MoveMenuItem { Display = "30秒戻る", OffsetSecond = -30 },
     };
 
-    private void SelectMoveMenu(Deck deck, ToolStripItemClickedEventArgs e)
+    private void SelectMoveMenu(Frame deck, ToolStripItemClickedEventArgs e)
     {
       var i = deck.Components.MoveMenu.Items.IndexOf(e.ClickedItem);
-      if (i == -1 || deck.PlayingDeckItem.VideoCapture == null)
+      if (i == -1 || deck.PlaybackData.VideoCapture == null)
       {
         return;
       }
       int offset = MoveMenu[i].OffsetSecond;
-      int newPos = deck.PlayingDeckItem.CurrentFramePos + (int)deck.PlayingDeckItem.VideoCapture.Fps * offset;
+      int newPos = deck.PlaybackData.CurrentFramePos + (int)deck.PlaybackData.VideoCapture.Fps * offset;
       if (newPos < 0)
       {
         newPos = 0;
       }
-      if (deck.PlayingDeckItem.VideoCapture.FrameCount <= newPos)
+      if (deck.PlaybackData.VideoCapture.FrameCount <= newPos)
       {
-        newPos = deck.PlayingDeckItem.VideoCapture.FrameCount - 1;
+        newPos = deck.PlaybackData.VideoCapture.FrameCount - 1;
       }
-      deck.PlayingDeckItem.CurrentFramePos = newPos;
+      deck.PlaybackData.CurrentFramePos = newPos;
     }
 
     private void moveMenuA_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -274,7 +274,7 @@ namespace gokart_vanal
     private void moveMenu_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
     {
       var i = moveMenu.DropDownItems.IndexOf(e.ClickedItem);
-      if (i == -1 || A.PlayingDeckItem.VideoCapture == null)
+      if (i == -1 || A.PlaybackData.VideoCapture == null)
       {
         return;
       }
@@ -304,24 +304,24 @@ namespace gokart_vanal
 
     private void MoveABFrames(int offset)
     {
-      int offsetA2B = B.PlayingDeckItem.CurrentFramePos - A.PlayingDeckItem.CurrentFramePos;
-      int newFramePos = A.PlayingDeckItem.CurrentFramePos + offset;
+      int offsetA2B = B.PlaybackData.CurrentFramePos - A.PlaybackData.CurrentFramePos;
+      int newFramePos = A.PlaybackData.CurrentFramePos + offset;
       if (newFramePos < 0)
       {
         newFramePos = 0;
       }
-      if (A.PlayingDeckItem.VideoCapture.FrameCount - 1 < newFramePos)
+      if (A.PlaybackData.VideoCapture.FrameCount - 1 < newFramePos)
       {
-        newFramePos = A.PlayingDeckItem.VideoCapture.FrameCount;
+        newFramePos = A.PlaybackData.VideoCapture.FrameCount;
       }
-      A.PlayingDeckItem.CurrentFramePos = newFramePos;
-      B.PlayingDeckItem.CurrentFramePos = newFramePos + offsetA2B;
+      A.PlaybackData.CurrentFramePos = newFramePos;
+      B.PlaybackData.CurrentFramePos = newFramePos + offsetA2B;
       RefreshVideo();
     }
 
     private void MoveABMillis(int offsetMillis)
     {
-      int offsetFrames = (int)Math.Round(A.PlayingDeckItem.VideoCapture.Fps * offsetMillis / 1000, MidpointRounding.AwayFromZero);
+      int offsetFrames = (int)Math.Round(A.PlaybackData.VideoCapture.Fps * offsetMillis / 1000, MidpointRounding.AwayFromZero);
       MoveABFrames(offsetFrames);
     }
 
@@ -347,12 +347,12 @@ namespace gokart_vanal
 
     private void export_Click(object sender, EventArgs e)
     {
-      var form = new ExportForm(A.PlayingDeckItem, B.PlayingDeckItem);
+      var form = new ExportForm(A.PlaybackData, B.PlaybackData);
       var dr = form.ShowDialog();
     }
 
 
-    private RectangleF NewSrcRect(Bitmap bitmap, DeckItem deckItem, RectangleF dst)
+    private RectangleF NewSrcRect(Bitmap bitmap, VideoData deckItem, RectangleF dst)
     {
       var height = bitmap.Height * deckItem.ScalePercent / 100;
       var top = (bitmap.Height - height) / 2 + bitmap.Height * deckItem.OffsetPercent / 100;
@@ -367,21 +367,21 @@ namespace gokart_vanal
       return new RectangleF(left, top, width, height);
     }
 
-    private void PaintDeck(Graphics g, bool dragging, Deck deck, RectangleF dst, Options options)
+    private void PaintFrame(Graphics g, bool dragging, Frame frame, RectangleF dst, MainSettings options)
     {
       if (dragging)
       {
-        g.FillRectangle(deck.Components.DragBrush, dst);
+        g.FillRectangle(frame.Components.DragBrush, dst);
       }
       else
       {
         g.FillRectangle(nullBrash, dst);
-        using (var mat = new Mat())
+        Mat mat = null;
         {
-          if (deck.PlayingDeckItem.VideoCapture != null)
+          if (frame.PlaybackData.VideoCapture != null)
           {
-            deck.PlayingDeckItem.VideoCapture.Set(VideoCaptureProperties.PosFrames, deck.PlayingDeckItem.CurrentFramePos);
-            deck.PlayingDeckItem.VideoCapture.Read(mat);
+            frame.PlaybackData.VideoCapture.Set(VideoCaptureProperties.PosFrames, frame.PlaybackData.CurrentFramePos);
+            mat = frame.PlaybackData.VideoCapture.RetrieveMat();
           }
 
           if (mat.Empty())
@@ -392,14 +392,15 @@ namespace gokart_vanal
           {
             using (var image = BitmapConverter.ToBitmap(mat))
             {
-              RectangleF src = NewSrcRect(image, deck.DeckItem, dst);
+              RectangleF src = NewSrcRect(image, frame.VideoData, dst);
               g.DrawImage(image, dst, src, GraphicsUnit.Pixel);
             }
           }
         }
-        if (deck.PlayingDeckItem.Session != null)
+
+        if (frame.PlaybackData.Session != null)
         {
-          var (t, l, q) = deck.PlayingDeckItem.Session.GetInfo(deck.PlayingDeckItem.CurrentFramePos, deck.PlayingDeckItem.VideoCapture.Fps, deck.DeckItem.Alfano6Offset);
+          var (t, l, q) = frame.PlaybackData.Session.GetInfo(frame.PlaybackData.CurrentFramePos, frame.PlaybackData.VideoCapture.Fps, frame.VideoData.Alfano6Offset);
           var detail = "";
           if (l != null)
           {
@@ -442,19 +443,19 @@ namespace gokart_vanal
       var rectA = new RectangleF(0, 0, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
       var rectB = new RectangleF(0, pictureBoxVideo.Height / 2, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
 
-      PaintDeck(e.Graphics, drag == Drag.OnA, A, rectA, Program.UserSettings.Options);
-      PaintDeck(e.Graphics, drag == Drag.OnB, B, rectB, Program.UserSettings.Options);
+      PaintFrame(e.Graphics, drag == Drag.OnA, A, rectA, Program.UserSettings.MainSetting);
+      PaintFrame(e.Graphics, drag == Drag.OnB, B, rectB, Program.UserSettings.MainSetting);
     }
 
-    private void CreateMakerWithName(Deck deck, string name)
+    private void CreateMakerWithName(Frame deck, string name)
     {
       var c = deck.Components;
-      var frame = deck.PlayingDeckItem.CurrentFramePos;
+      var frame = deck.PlaybackData.CurrentFramePos;
       c.MarkerBindingSource.Add(new Marker { Name = name, Frame = frame });
       c.Markers.SelectedIndex = c.Markers.Items.Count - 1;
     }
 
-    private void CreateMarker(Deck deck)
+    private void CreateMarker(Frame deck)
     {
       var m = new MarkerNameModal();
       var dr = m.ShowDialog();
@@ -476,7 +477,7 @@ namespace gokart_vanal
       }
     }
 
-    private void SelectMarker(Deck deck)
+    private void SelectMarker(Frame deck)
     {
       var i = deck.Components.Markers.SelectedIndex;
       if (i == -1)
@@ -484,7 +485,7 @@ namespace gokart_vanal
         return;
       }
       var m = (Marker)deck.Components.MarkerBindingSource[i];
-      deck.PlayingDeckItem.CurrentFramePos = m.Frame;
+      deck.PlaybackData.CurrentFramePos = m.Frame;
       pictureBoxVideo.Invalidate();
     }
 
@@ -507,16 +508,16 @@ namespace gokart_vanal
       SelectMarker(B);
     }
 
-    private void ProcessDragDrop(Deck deck, string filePath)
+    private void ProcessDragDrop(Frame deck, string filePath)
     {
       if (FileTypeDetector.Detect(filePath) == FileType.Video)
       {
-        Program.UserSettings.RestoreFromHistory(deck.DeckItem, filePath);
+        Program.UserSettings.RestoreFromHistory(deck.VideoData, filePath);
       }
       else
       {
-        deck.DeckItem.Alfano6Path = filePath;
-        deck.DeckItem.Alfano6Offset = 0;
+        deck.VideoData.Alfano6Path = filePath;
+        deck.VideoData.Alfano6Offset = 0;
       }
       ResetDeck(deck);
       Program.UserSettings.Save();
@@ -598,11 +599,11 @@ namespace gokart_vanal
       UpdateControlAbilities();
     }
 
-    private void JumpToLap(Deck deck)
+    private void JumpToLap(Frame deck)
     {
       var lapNumber = deck.Components.JumpToLap.SelectedIndex + 1;
-      var framePos = deck.PlayingDeckItem.Session.GetFramePos(lapNumber, deck.PlayingDeckItem.VideoCapture.Fps, deck.DeckItem.Alfano6Offset);
-      deck.PlayingDeckItem.CurrentFramePos = framePos;
+      var framePos = deck.PlaybackData.Session.GetFramePos(lapNumber, deck.PlaybackData.VideoCapture.Fps, deck.VideoData.Alfano6Offset);
+      deck.PlaybackData.CurrentFramePos = framePos;
       RefreshVideo();
     }
 
@@ -618,7 +619,7 @@ namespace gokart_vanal
 
     private void options_Click(object sender, EventArgs e)
     {
-      var f = new OptionsForm(this, Program.UserSettings.Options);
+      var f = new OptionsForm(this, Program.UserSettings.MainSetting);
       f.ShowDialog();
       Program.UserSettings.Save();
       UpdateControlAbilities();

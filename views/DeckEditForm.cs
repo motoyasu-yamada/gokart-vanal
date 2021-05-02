@@ -6,9 +6,9 @@ namespace gokart_vanal
   public partial class DeckEditForm : Form
   {
     private MainForm playerWindow;
-    private Deck deck;
+    private Frame deck;
 
-    public DeckEditForm(MainForm playerWindow, Deck deck)
+    public DeckEditForm(MainForm playerWindow, Frame deck)
     {
       this.playerWindow = playerWindow;
       this.deck = deck;
@@ -23,14 +23,14 @@ namespace gokart_vanal
 
     private void UpdateControls()
     {
-      videoPath.Text = deck.DeckItem.VideoPath;
-      fps.Text = deck.PlayingDeckItem.VideoCapture != null ? deck.PlayingDeckItem.VideoCapture.Fps.ToString() : "-";
-      frameCount.Text = deck.PlayingDeckItem.VideoCapture != null ? deck.PlayingDeckItem.VideoCapture.FrameCount.ToString() : "-";
-      SelectScalingMethod(deck.DeckItem.VideoScalingMethod);
-      scalePercent.Text = deck.DeckItem.ScalePercent.ToString();
-      offsetPercent.Text = deck.DeckItem.OffsetPercent.ToString();
-      alfano6Path.Text = deck.DeckItem.Alfano6Path;
-      alfano6Offset.Text = deck.DeckItem.Alfano6Offset.ToString();
+      videoPath.Text = deck.VideoData.VideoPath;
+      fps.Text = deck.PlaybackData.VideoCapture != null ? deck.PlaybackData.VideoCapture.Fps.ToString() : "-";
+      frameCount.Text = deck.PlaybackData.VideoCapture != null ? deck.PlaybackData.VideoCapture.FrameCount.ToString() : "-";
+      SelectScalingMethod(deck.VideoData.VideoScalingMethod);
+      scalePercent.Text = deck.VideoData.ScalePercent.ToString();
+      offsetPercent.Text = deck.VideoData.OffsetPercent.ToString();
+      alfano6Path.Text = deck.VideoData.Alfano6Path;
+      alfano6Offset.Text = deck.VideoData.Alfano6Offset.ToString();
     }
 
     private void SelectScalingMethod(VideoScalingMethod method)
@@ -40,19 +40,19 @@ namespace gokart_vanal
 
     private void scalingMethod_SelectedIndexChanged(object sender, EventArgs e)
     {
-      deck.DeckItem.VideoScalingMethod = scalingMethod.SelectedIndex == 0 ? VideoScalingMethod.FitToScreen : VideoScalingMethod.SameRatio;
+      deck.VideoData.VideoScalingMethod = scalingMethod.SelectedIndex == 0 ? VideoScalingMethod.FitToScreen : VideoScalingMethod.SameRatio;
       playerWindow.RefreshVideo();
     }
 
     private void scalePercent_SelectedIndexChanged(object sender, EventArgs e)
     {
-      deck.DeckItem.ScalePercent = int.Parse(scalePercent.Text);
+      deck.VideoData.ScalePercent = int.Parse(scalePercent.Text);
       playerWindow.RefreshVideo();
     }
 
     private void offsetPercent_SelectedIndexChanged(object sender, EventArgs e)
     {
-      deck.DeckItem.OffsetPercent = int.Parse(offsetPercent.Text);
+      deck.VideoData.OffsetPercent = int.Parse(offsetPercent.Text);
       playerWindow.RefreshVideo();
     }
 
@@ -63,31 +63,31 @@ namespace gokart_vanal
 
     private void setAlfano6OffsetToCurrentFrame_Click(object sender, EventArgs e)
     {
-      deck.DeckItem.Alfano6Offset = deck.PlayingDeckItem.CurrentFramePos;
-      alfano6Offset.Text = deck.DeckItem.Alfano6Offset.ToString();
+      deck.VideoData.Alfano6Offset = deck.PlaybackData.CurrentFramePos;
+      alfano6Offset.Text = deck.VideoData.Alfano6Offset.ToString();
       playerWindow.RefreshVideo();
     }
 
     private void alfano6Offset_TextChanged(object sender, EventArgs e)
     {
-      deck.DeckItem.Alfano6Offset = int.Parse(alfano6Offset.Text);
+      deck.VideoData.Alfano6Offset = int.Parse(alfano6Offset.Text);
       playerWindow.RefreshVideo();
     }
 
     private void detachVideo_Click(object sender, EventArgs e)
     {
-      deck.DeckItem.VideoPath = null;
-      deck.DeckItem.Alfano6Path = null;
-      deck.PlayingDeckItem.VideoCapture = null;
-      deck.PlayingDeckItem.Session = null;
+      deck.VideoData.VideoPath = null;
+      deck.VideoData.Alfano6Path = null;
+      deck.PlaybackData.VideoCapture = null;
+      deck.PlaybackData.Session = null;
       playerWindow.RefreshVideo();
       UpdateControls();
     }
 
     private void detachAlfano6_Click(object sender, EventArgs e)
     {
-      deck.DeckItem.Alfano6Path = null;
-      deck.PlayingDeckItem.Session = null;
+      deck.VideoData.Alfano6Path = null;
+      deck.PlaybackData.Session = null;
       playerWindow.RefreshVideo();
       UpdateControls();
     }
