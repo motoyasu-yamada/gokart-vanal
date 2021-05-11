@@ -380,7 +380,10 @@ namespace gokart_vanal
         {
           if (frame.PlaybackData.VideoCapture != null)
           {
-            frame.PlaybackData.VideoCapture.Set(VideoCaptureProperties.PosFrames, frame.PlaybackData.CurrentFramePos);
+            if (frame.PlaybackData.VideoCapture.Get(VideoCaptureProperties.PosFrames) != frame.PlaybackData.CurrentFramePos)
+            {
+              frame.PlaybackData.VideoCapture.Set(VideoCaptureProperties.PosFrames, frame.PlaybackData.CurrentFramePos);
+            }           
             mat = frame.PlaybackData.VideoCapture.RetrieveMat();
           }
 
