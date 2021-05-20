@@ -5,6 +5,7 @@ using OpenCvSharp.Extensions;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace gokart_vanal
@@ -26,6 +27,7 @@ namespace gokart_vanal
     public MainForm()
     {
       InitializeComponent();
+
       pictureBoxVideo.AllowDrop = true;
       foreach (var i in MoveMenu)
       {
@@ -186,7 +188,7 @@ namespace gokart_vanal
 
     public void RefreshVideo()
     {
-      pictureBoxVideo.Invalidate();
+      pictureBoxVideo.Refresh();
     }
 
     private void hScrollBarA_ValueChanged(object sender, EventArgs e)
@@ -319,10 +321,38 @@ namespace gokart_vanal
       RefreshVideo();
     }
 
+
     private void MoveABMillis(int offsetMillis)
     {
       int offsetFrames = (int)Math.Round(A.PlaybackData.VideoCapture.Fps * offsetMillis / 1000, MidpointRounding.AwayFromZero);
       MoveABFrames(offsetFrames);
+    }
+
+    private void PlayWork(object sender, EventArgs e)
+    {
+      // var frames = 0;
+      // var started = Environment.TickCount;
+      // for (var i = 0; i < 60;i++)
+      {
+
+        MoveABFrames(1);
+        // frames++;
+        //var toWait = 1000 / 60 - frameElapsed;
+        //if (0 < toWait)
+        //{
+        //  Task.Delay(toWait).Wait();
+        //}
+      }
+      // var elapsed = Environment.TickCount - started;
+      // var fps = frames * 1000 / elapsed;
+      // Debug.WriteLine($"FPS Frames:{frames},Elapsed: {elapsed}, FPS: {fps}");
+    }
+
+    private void play_Click(object sender, EventArgs e)
+    {
+      playTimer.Interval = 1000 / 60;
+      playTimer.Tick += new EventHandler(PlayWork);
+      playTimer.Start();
     }
 
     private void moveNext1Frame_Click(object sender, EventArgs e)
@@ -379,20 +409,17 @@ namespace gokart_vanal
         Mat mat = null;
         {
           if (frame.PlaybackData.VideoCapture != null)
-          {
-            if (frame.PlaybackData.VideoCapture.Get(VideoCaptureProperties.PosFrames) != frame.PlaybackData.CurrentFramePos)
-            {
-              frame.PlaybackData.VideoCapture.Set(VideoCaptureProperties.PosFrames, frame.PlaybackData.CurrentFramePos);
-            }           
-            mat = frame.PlaybackData.VideoCapture.RetrieveMat();
+          {       
+            mat = frame.PlaybackData.CurrentMat;
           }
 
-          if (mat.Empty())
+          if (mat == null || mat.Empty())
           {
             g.FillRectangle(noneBrush, dst);
           }
           else
           {
+
             using (var image = BitmapConverter.ToBitmap(mat))
             {
               RectangleF src = NewSrcRect(image, frame.VideoData, dst);
@@ -443,11 +470,12 @@ namespace gokart_vanal
     private void pictureBoxVideo_Paint(object sender, PaintEventArgs e)
     {
 
+      var g = e.Graphics;
       var rectA = new RectangleF(0, 0, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
       var rectB = new RectangleF(0, pictureBoxVideo.Height / 2, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
-
-      PaintFrame(e.Graphics, drag == Drag.OnA, A, rectA, Program.UserSettings.MainSetting);
-      PaintFrame(e.Graphics, drag == Drag.OnB, B, rectB, Program.UserSettings.MainSetting);
+      
+      PaintFrame(g, drag == Drag.OnA, A, rectA, Program.UserSettings.MainSetting);
+      PaintFrame(g, drag == Drag.OnB, B, rectB, Program.UserSettings.MainSetting);
     }
 
     private void CreateMakerWithName(Frame deck, string name)
@@ -627,5 +655,6 @@ namespace gokart_vanal
       Program.UserSettings.Save();
       UpdateControlAbilities();
     }
+
   }
 }

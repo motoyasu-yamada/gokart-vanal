@@ -43,22 +43,24 @@ namespace gokart_vanal
       this.moveNext100ms = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
       this.toolStripDefault = new System.Windows.Forms.ToolStrip();
+      this.play = new System.Windows.Forms.ToolStripButton();
       this.moveMenu = new System.Windows.Forms.ToolStripDropDownButton();
       this.deckA = new System.Windows.Forms.ToolStripButton();
       this.jumpToLapA = new System.Windows.Forms.ToolStripComboBox();
+      this.createMarkerA = new System.Windows.Forms.ToolStripButton();
       this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
       this.deckB = new System.Windows.Forms.ToolStripButton();
       this.jumpToLapB = new System.Windows.Forms.ToolStripComboBox();
       this.markersB = new System.Windows.Forms.ToolStripComboBox();
+      this.createMarkerB = new System.Windows.Forms.ToolStripButton();
+      this.export = new System.Windows.Forms.ToolStripButton();
+      this.options = new System.Windows.Forms.ToolStripButton();
       this.moveMenuA = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.moveMenuB = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.moveMenuButtonB = new System.Windows.Forms.Button();
       this.moveMenuButtonA = new System.Windows.Forms.Button();
-      this.createMarkerA = new System.Windows.Forms.ToolStripButton();
-      this.createMarkerB = new System.Windows.Forms.ToolStripButton();
-      this.export = new System.Windows.Forms.ToolStripButton();
-      this.options = new System.Windows.Forms.ToolStripButton();
       this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
+      this.playTimer = new System.Windows.Forms.Timer(this.components);
       this.toolStripDefault.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
       this.SuspendLayout();
@@ -181,6 +183,7 @@ namespace gokart_vanal
       this.toolStripDefault.GripMargin = new System.Windows.Forms.Padding(6);
       this.toolStripDefault.ImeMode = System.Windows.Forms.ImeMode.Off;
       this.toolStripDefault.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.play,
             this.movePrev100ms,
             this.movePrev1Frame,
             this.moveNext1Frame,
@@ -207,6 +210,16 @@ namespace gokart_vanal
       this.toolStripDefault.TabIndex = 1;
       this.toolStripDefault.Text = "デフォルト";
       // 
+      // play
+      // 
+      this.play.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+      this.play.Image = ((System.Drawing.Image)(resources.GetObject("play.Image")));
+      this.play.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.play.Name = "play";
+      this.play.Size = new System.Drawing.Size(35, 22);
+      this.play.Text = "再生";
+      this.play.Click += new System.EventHandler(this.play_Click);
+      // 
       // moveMenu
       // 
       this.moveMenu.Name = "moveMenu";
@@ -231,6 +244,16 @@ namespace gokart_vanal
       this.jumpToLapA.Size = new System.Drawing.Size(100, 25);
       this.jumpToLapA.ToolTipText = "A画面を指定したラップへ移動する";
       this.jumpToLapA.SelectedIndexChanged += new System.EventHandler(this.jumpToLapA_SelectedIndexChanged);
+      // 
+      // createMarkerA
+      // 
+      this.createMarkerA.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.createMarkerA.Image = ((System.Drawing.Image)(resources.GetObject("createMarkerA.Image")));
+      this.createMarkerA.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.createMarkerA.Name = "createMarkerA";
+      this.createMarkerA.Size = new System.Drawing.Size(23, 22);
+      this.createMarkerA.ToolTipText = "A画面の現在のフレーム位置をマーカーとして保存します。";
+      this.createMarkerA.Click += new System.EventHandler(this.createMarkerA_Click);
       // 
       // toolStripSeparator4
       // 
@@ -264,6 +287,38 @@ namespace gokart_vanal
       this.markersB.Size = new System.Drawing.Size(100, 25);
       this.markersB.ToolTipText = "B画面のマーカー一覧";
       this.markersB.SelectedIndexChanged += new System.EventHandler(this.markersB_SelectedIndexChanged);
+      // 
+      // createMarkerB
+      // 
+      this.createMarkerB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.createMarkerB.Image = ((System.Drawing.Image)(resources.GetObject("createMarkerB.Image")));
+      this.createMarkerB.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.createMarkerB.Name = "createMarkerB";
+      this.createMarkerB.Size = new System.Drawing.Size(23, 22);
+      this.createMarkerB.ToolTipText = "B画面の現在のフレーム位置をマーカーとして保存します。";
+      this.createMarkerB.Click += new System.EventHandler(this.createMarkerB_Click);
+      // 
+      // export
+      // 
+      this.export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.export.Image = global::gokart_vanal.Properties.Resources.ResultToCSV_16x;
+      this.export.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.export.Name = "export";
+      this.export.Size = new System.Drawing.Size(23, 20);
+      this.export.Text = "書き出す...";
+      this.export.ToolTipText = "画像の書き出す...";
+      this.export.Click += new System.EventHandler(this.export_Click);
+      // 
+      // options
+      // 
+      this.options.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.options.Image = ((System.Drawing.Image)(resources.GetObject("options.Image")));
+      this.options.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.options.Name = "options";
+      this.options.Size = new System.Drawing.Size(23, 20);
+      this.options.Text = "toolStripButton1";
+      this.options.ToolTipText = "設定";
+      this.options.Click += new System.EventHandler(this.options_Click);
       // 
       // moveMenuA
       // 
@@ -300,48 +355,6 @@ namespace gokart_vanal
       this.moveMenuButtonA.UseVisualStyleBackColor = true;
       this.moveMenuButtonA.Click += new System.EventHandler(this.moveMenuButtonA_Click);
       // 
-      // createMarkerA
-      // 
-      this.createMarkerA.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.createMarkerA.Image = ((System.Drawing.Image)(resources.GetObject("createMarkerA.Image")));
-      this.createMarkerA.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.createMarkerA.Name = "createMarkerA";
-      this.createMarkerA.Size = new System.Drawing.Size(23, 22);
-      this.createMarkerA.ToolTipText = "A画面の現在のフレーム位置をマーカーとして保存します。";
-      this.createMarkerA.Click += new System.EventHandler(this.createMarkerA_Click);
-      // 
-      // createMarkerB
-      // 
-      this.createMarkerB.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.createMarkerB.Image = ((System.Drawing.Image)(resources.GetObject("createMarkerB.Image")));
-      this.createMarkerB.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.createMarkerB.Name = "createMarkerB";
-      this.createMarkerB.Size = new System.Drawing.Size(23, 22);
-      this.createMarkerB.ToolTipText = "B画面の現在のフレーム位置をマーカーとして保存します。";
-      this.createMarkerB.Click += new System.EventHandler(this.createMarkerB_Click);
-      // 
-      // export
-      // 
-      this.export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.export.Image = global::gokart_vanal.Properties.Resources.ResultToCSV_16x;
-      this.export.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.export.Name = "export";
-      this.export.Size = new System.Drawing.Size(23, 22);
-      this.export.Text = "書き出す...";
-      this.export.ToolTipText = "画像の書き出す...";
-      this.export.Click += new System.EventHandler(this.export_Click);
-      // 
-      // options
-      // 
-      this.options.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-      this.options.Image = ((System.Drawing.Image)(resources.GetObject("options.Image")));
-      this.options.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.options.Name = "options";
-      this.options.Size = new System.Drawing.Size(23, 22);
-      this.options.Text = "toolStripButton1";
-      this.options.ToolTipText = "設定";
-      this.options.Click += new System.EventHandler(this.options_Click);
-      // 
       // pictureBoxVideo
       // 
       this.pictureBoxVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -370,6 +383,7 @@ namespace gokart_vanal
       this.Controls.Add(this.hScrollBarB);
       this.Controls.Add(this.hScrollBarA);
       this.Controls.Add(this.pictureBoxVideo);
+      this.DoubleBuffered = true;
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.ImeMode = System.Windows.Forms.ImeMode.Alpha;
       this.Name = "MainForm";
@@ -414,5 +428,7 @@ namespace gokart_vanal
     private System.Windows.Forms.ContextMenuStrip moveMenuA;
     private System.Windows.Forms.ContextMenuStrip moveMenuB;
     private System.Windows.Forms.ToolStripButton options;
+    private System.Windows.Forms.ToolStripButton play;
+    private System.Windows.Forms.Timer playTimer;
   }
 }
