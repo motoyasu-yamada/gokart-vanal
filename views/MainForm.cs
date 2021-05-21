@@ -147,7 +147,7 @@ namespace gokart_vanal
     {
       if (deck.VideoData.VideoPath != null)
       {
-        deck.PlaybackData.VideoCapture = new VideoCapture(deck.VideoData.VideoPath);
+        deck.PlaybackData.VideoCapture = new VideoCapture(deck.VideoData.VideoPath, VideoCaptureAPIs.FFMPEG);
       }
 
       deck.Components.MarkerBindingSource.ResetBindings(false);
@@ -330,29 +330,22 @@ namespace gokart_vanal
 
     private void PlayWork(object sender, EventArgs e)
     {
-      // var frames = 0;
-      // var started = Environment.TickCount;
-      // for (var i = 0; i < 60;i++)
-      {
-
-        MoveABFrames(1);
-        // frames++;
-        //var toWait = 1000 / 60 - frameElapsed;
-        //if (0 < toWait)
-        //{
-        //  Task.Delay(toWait).Wait();
-        //}
-      }
-      // var elapsed = Environment.TickCount - started;
-      // var fps = frames * 1000 / elapsed;
-      // Debug.WriteLine($"FPS Frames:{frames},Elapsed: {elapsed}, FPS: {fps}");
+      MoveABFrames(1);
     }
 
     private void play_Click(object sender, EventArgs e)
     {
-      playTimer.Interval = 1000 / 60;
-      playTimer.Tick += new EventHandler(PlayWork);
-      playTimer.Start();
+      if (playTimer.Enabled)
+      {
+        playTimer.Stop();
+        playTimer.Tick -= PlayWork;
+      }
+      else
+      {
+        playTimer.Interval = 1000 / 60;
+        playTimer.Tick += PlayWork;
+        playTimer.Start();
+      }
     }
 
     private void moveNext1Frame_Click(object sender, EventArgs e)
