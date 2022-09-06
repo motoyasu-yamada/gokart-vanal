@@ -182,7 +182,7 @@ namespace gokart_vanal
         deck.Components.JumpToLap.Items.Clear();
       }
 
-      deck.Components.Markers.ComboBox.DataSource = 
+      deck.Components.Markers.ComboBox.DataSource =
       deck.Components.MarkerBindingSource = new BindingSource(deck.VideoData.Markers, "");
     }
 
@@ -375,19 +375,36 @@ namespace gokart_vanal
     }
 
 
-    private RectangleF NewSrcRect(Bitmap bitmap, VideoData deckItem, RectangleF dst)
+    private static RectangleF NewSrcRect(Bitmap bitmap, VideoData deckItem, RectangleF dst, MainSettings options)
     {
-      var height = bitmap.Height * deckItem.ScalePercent / 100;
-      var top = (bitmap.Height - height) / 2 + bitmap.Height * deckItem.OffsetPercent / 100;
-
-      if (deckItem.VideoScalingMethod == VideoScalingMethod.FitToScreen)
+      if (options.LayoutType == LayoutType.ArrangeVertically)
       {
-        return new RectangleF(0, top, bitmap.Width, height);
-      }
+        var height = bitmap.Height * deckItem.ScalePercent / 100;
+        var top = (bitmap.Height - height) / 2 + bitmap.Height * deckItem.OffsetPercent / 100;
 
-      var width = height * dst.Width / dst.Height;
-      var left = (bitmap.Width - width) / 2;
-      return new RectangleF(left, top, width, height);
+        if (deckItem.VideoScalingMethod == VideoScalingMethod.FitToScreen)
+        {
+          return new RectangleF(0, top, bitmap.Width, height);
+        }
+
+        var width = height * dst.Width / dst.Height;
+        var left = (bitmap.Width - width) / 2;
+        return new RectangleF(left, top, width, height);
+      }
+      else
+      {
+        var width = bitmap.Width * deckItem.ScalePercent / 100;
+        var left = (bitmap.Width - width) / 2 + bitmap.Width * deckItem.OffsetPercent / 100;
+
+        if (deckItem.VideoScalingMethod == VideoScalingMethod.FitToScreen)
+        {
+          return new RectangleF(left, 0, width, bitmap.Height);
+        }
+
+        var height = width * dst.Height / dst.Width;
+        var top = (bitmap.Height - height) / 2;
+        return new RectangleF(left, top, width, height);
+      }
     }
 
     private void PaintFrame(Graphics g, bool dragging, Frame frame, RectangleF dst, MainSettings options)
@@ -402,7 +419,7 @@ namespace gokart_vanal
         Mat mat = null;
         {
           if (frame.PlaybackData.VideoCapture != null)
-          {       
+          {
             mat = frame.PlaybackData.CurrentMat;
           }
 
@@ -415,7 +432,7 @@ namespace gokart_vanal
 
             using (var image = BitmapConverter.ToBitmap(mat))
             {
-              RectangleF src = NewSrcRect(image, frame.VideoData, dst);
+              RectangleF src = NewSrcRect(image, frame.VideoData, dst, options);
               g.DrawImage(image, dst, src, GraphicsUnit.Pixel);
             }
           }
@@ -444,7 +461,7 @@ namespace gokart_vanal
         {
           using (var pen = new Pen(Color.FromArgb(100, 255, 255, 255)))
           {
-            var (splitX,splitY) = options.GridType.NumberOfGrids();
+            var (splitX, splitY) = options.GridType.NumberOfGrids();
             for (int i = 0; i <= splitX; i++)
             {
               float x = dst.Left + dst.Width * i / splitX;
@@ -460,13 +477,28 @@ namespace gokart_vanal
       }
     }
 
+    private (RectangleF, RectangleF) NewDstRect(LayoutType layoutType)
+    {
+      if (layoutType == LayoutType.ArrangeVertically)
+      {
+        var rectA = new RectangleF(0, 0, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
+        var rectB = new RectangleF(0, pictureBoxVideo.Height / 2, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
+        return (rectA, rectB);
+      }
+      else
+      {
+        var rectA = new RectangleF(0, 0, pictureBoxVideo.Width/2, pictureBoxVideo.Height);
+        var rectB = new RectangleF(pictureBoxVideo.Width / 2, 0, pictureBoxVideo.Width/2, pictureBoxVideo.Height);
+        return (rectA, rectB);
+      }
+    }
+
     private void pictureBoxVideo_Paint(object sender, PaintEventArgs e)
     {
 
       var g = e.Graphics;
-      var rectA = new RectangleF(0, 0, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
-      var rectB = new RectangleF(0, pictureBoxVideo.Height / 2, pictureBoxVideo.Width, pictureBoxVideo.Height / 2);
-      
+      var (rectA, rectB) = NewDstRect(Program.UserSettings.MainSetting.LayoutType);
+
       PaintFrame(g, drag == Drag.OnA, A, rectA, Program.UserSettings.MainSetting);
       PaintFrame(g, drag == Drag.OnB, B, rectB, Program.UserSettings.MainSetting);
     }

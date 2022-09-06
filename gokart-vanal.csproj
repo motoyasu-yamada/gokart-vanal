@@ -78,6 +78,7 @@
     <Compile Include="alfano6\Session.cs" />
     <Compile Include="models\frame\FrameComponents.cs" />
     <Compile Include="models\frame\FrameLayout.cs" />
+    <Compile Include="models\LayoutType.cs" />
     <Compile Include="models\VideoData.cs" />
     <Compile Include="models\settings\FrameSetting.cs" />
     <Compile Include="models\settings\ExportSetting.cs" />

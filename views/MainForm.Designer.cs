@@ -323,7 +323,7 @@ namespace gokart_vanal
       // moveMenuA
       // 
       this.moveMenuA.Name = "moveMenuA";
-      this.moveMenuA.Size = new System.Drawing.Size(61, 4);
+      this.moveMenuA.Size = new System.Drawing.Size(181, 26);
       this.moveMenuA.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.moveMenuA_ItemClicked);
       // 
       // moveMenuB
@@ -387,7 +387,7 @@ namespace gokart_vanal
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.ImeMode = System.Windows.Forms.ImeMode.Alpha;
       this.Name = "MainForm";
-      this.Text = "GoKART VANAL - 車載動画分析";
+      this.Text = "Racing Video Analysis - 車載動画分析";
       this.Activated += new System.EventHandler(this.PlayerWindow_Activated);
       this.Resize += new System.EventHandler(this.PlayerWindow_Resize);
       this.toolStripDefault.ResumeLayout(false);

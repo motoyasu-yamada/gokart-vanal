@@ -4053,6 +4053,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C3BC9BD4D2361D53036CBB5017F81D60"
+        "OwnerKey" = "8:_66DF92C2CE207CFB016A010B476D2D5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C3BC9BD4D2361D53036CBB5017F81D60"
+        "OwnerKey" = "8:_4C4A7B6150E118D33CA303F5C79063F6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C5C907E197705C37504A58B073B00678"
         "OwnerKey" = "8:_48CAC2AFFFA082E270A61D53052758D0"
         "MsmSig" = "8:_UNDEFINED"
@@ -4181,18 +4193,6 @@
         {
         "MsmKey" = "8:_D241A5D5DE9CFB2D1D89BAC9FE25E2B8"
         "OwnerKey" = "8:_00FDC69D3B71F2B093FE260ABB98A877"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D241A5D5DE9CFB2D1D89BAC9FE25E2B8"
-        "OwnerKey" = "8:_66DF92C2CE207CFB016A010B476D2D5F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D241A5D5DE9CFB2D1D89BAC9FE25E2B8"
-        "OwnerKey" = "8:_4C4A7B6150E118D33CA303F5C79063F6"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -5561,6 +5561,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_66DF92C2CE207CFB016A010B476D2D5F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C3BC9BD4D2361D53036CBB5017F81D60"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -11218,6 +11224,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C3BC9BD4D2361D53036CBB5017F81D60"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:System.Numerics.Vectors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C3BC9BD4D2361D53036CBB5017F81D60"
+                    {
+                    "Name" = "8:System.Numerics.Vectors.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Numerics.Vectors.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B284F199BC234CE9A426F53D3CE129BF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C5C907E197705C37504A58B073B00678"
             {
             "AssemblyRegister" = "3:1"
@@ -13031,20 +13068,20 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:GoKART! VANAL"
-        "ProductCode" = "8:{124D7309-535A-4C16-AEAD-D7251B6F266C}"
-        "PackageCode" = "8:{FEAD6007-4EBC-42D5-AA97-AF4332BF74A1}"
+        "ProductName" = "8:Racing Video Analysis"
+        "ProductCode" = "8:{2CBA5926-061C-4B56-8370-DF2A9422BE02}"
+        "PackageCode" = "8:{F77192DE-EAD8-401E-A8FE-A165B2312FA7}"
         "UpgradeCode" = "8:{93606672-3236-473C-B042-7F5B9311B430}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:Spicysoft Corporation"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:GoKART! VANAL"
+        "Title" = "8:Racing Video Analysis"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Spicysoft Corporation"
         "Keywords" = "8:"
