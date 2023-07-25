@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace gokart_vanal.alfano6
+namespace gokart_vanal.logger
 {
   public class Session
   {
@@ -15,7 +15,7 @@ namespace gokart_vanal.alfano6
     {
       Debug.Assert(1 <= lapNo && lapNo <= Laps.Length);
       decimal elapsedMillis = 0;
-      for (var i = 0; i < lapNo - 1; i ++)
+      for (var i = 0; i < lapNo - 1; i++)
       {
         elapsedMillis += Laps[i].LapTime;
       }

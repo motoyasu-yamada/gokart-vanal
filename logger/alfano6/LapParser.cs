@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using gokart_vanal.logger;
+using System.Collections.Generic;
 
 namespace gokart_vanal.alfano6
 {
-
-  public class Lap
+  public class LapParser
   {
     public static Lap Parse(Dictionary<string, string> data)
     {
@@ -19,16 +19,5 @@ namespace gokart_vanal.alfano6
         MaxExaustTemperature = decimal.Parse(data["Max T2"]) / 10,
       };
     }
-
-    public uint LapNumber { get; set; }
-    public decimal LapTime { get; set; }
-    public uint MaxRPM { get; set; }
-    public uint MinRPM { get; set; }
-    public decimal MinSpeed { get; set; }
-    public decimal MaxSpeed { get; set; }
-    public decimal MinExaustTemperature { get; set; }
-    public decimal MaxExaustTemperature { get; set; }
-
-    public LapQuantum50hz[] Quantums { get; set; }
   }
 }

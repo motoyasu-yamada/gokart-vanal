@@ -71,11 +71,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="alfano6\LapQuantum50hz.cs" />
-    <Compile Include="alfano6\Reader.cs" />
-    <Compile Include="alfano6\CsvParser.cs" />
-    <Compile Include="alfano6\Lap.cs" />
-    <Compile Include="alfano6\Session.cs" />
+    <Compile Include="logger\aim\XrkReader.cs" />
+    <Compile Include="logger\alfano6\LapParser.cs" />
+    <Compile Include="logger\LapQuantum50hz.cs" />
+    <Compile Include="logger\alfano6\Reader.cs" />
+    <Compile Include="logger\alfano6\CsvParser.cs" />
+    <Compile Include="logger\Lap.cs" />
+    <Compile Include="logger\alfano6\LapQuantum50hzParser.cs" />
+    <Compile Include="logger\Session.cs" />
+    <Compile Include="logger\aim\MatLabXrk.cs" />
+    <Compile Include="logger\aim\MatLabXrkTest.cs" />
     <Compile Include="models\frame\FrameComponents.cs" />
     <Compile Include="models\frame\FrameLayout.cs" />
     <Compile Include="models\LayoutType.cs" />
@@ -205,6 +210,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\OptionsDropdown1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

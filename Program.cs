@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using gokart_vanal.alfano6;
 
 namespace gokart_vanal
 {
@@ -13,6 +14,7 @@ namespace gokart_vanal
     [STAThread]
     static void Main()
     {
+      MatLabXrkTest.Test();
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
       Application.Run(new MainForm());

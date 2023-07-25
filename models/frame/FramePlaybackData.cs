@@ -1,4 +1,5 @@
-﻿using gokart_vanal.models;
+﻿using gokart_vanal.logger;
+using gokart_vanal.models;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -28,7 +29,7 @@ namespace gokart_vanal
       }
     }
 
-    public alfano6.Session Session { get; set; }
+    public Session Session { get; set; }
 
     private Mat currentMat;
     private int currentMatFrame = -1;

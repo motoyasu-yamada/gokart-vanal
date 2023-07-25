@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using gokart_vanal.logger;
+using System.Collections.Generic;
 
 namespace gokart_vanal.alfano6
 {
-  public class LapQuantum50hz
+  public class LapQuantum50hzParser
   {
     public static LapQuantum50hz[] Parse(Dictionary<string, string> data)
     {
@@ -21,15 +22,5 @@ namespace gokart_vanal.alfano6
         new LapQuantum50hz{ RPM = uint.Parse(data["RPM 5 50Hz"]), Speed= speed,ExaustTemperature =temp,Orientation = or, Latitude =lat,Longtitude=lon,Altitude = alt }
       };
     }
-
-    public uint RPM { get; set; }
-    public decimal Speed { get; set; }
-    public decimal ExaustTemperature { get; set; }
-
-    public decimal Orientation { get; set; }
-    public uint Latitude { get; set; }
-    public uint Longtitude { get; set; }
-    public uint Altitude { get; set; }
-
   }
 }

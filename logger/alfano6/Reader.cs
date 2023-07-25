@@ -1,4 +1,5 @@
-﻿using System;
+﻿using gokart_vanal.logger;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -78,7 +79,7 @@ namespace gokart_vanal.alfano6
         Location = loc,
         NumberOfLaps = numberOfLap,
         StartAt = startAt,
-        Laps = data.Select(d => Lap.Parse(d)).ToArray()
+        Laps = data.Select(d => LapParser.Parse(d)).ToArray()
       };
     }
 
@@ -88,7 +89,7 @@ namespace gokart_vanal.alfano6
       var list = new List<LapQuantum50hz>();
       foreach (var d in data)
       {
-        var q5 = LapQuantum50hz.Parse(d);
+        var q5 = LapQuantum50hzParser.Parse(d);
         foreach (var q1 in q5)
         {
           list.Add(q1);
